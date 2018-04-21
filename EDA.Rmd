@@ -1,0 +1,141 @@
+---
+title: "EDA"
+output: html_notebook
+---
+
+Read dataset
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r eda, message=FALSE, warning=FALSE, results='hide'}
+library(tidyverse)
+accidents <- read_csv("NYPD_Motor_Vehicle_Collisions.csv")
+```
+
+Look at data
+
+```{r}
+tail(accidents)
+
+```
+
+```{r}
+str(accidents)
+```
+## Missing Quality Analysis
+
+
+```{r}
+library(skimr)
+skimr::skim(accidents) %>% filter(stat == "missing") %>%
+arrange(desc(value)) %>% select(variable, type, value) %>% mutate(percent = value/nrow(accidents))
+
+```
+```{r}
+accidents <- accidents %>% mutate(VEHICLES_INVOLVED_GTE3 = 1 * !is.na(`CONTRIBUTING FACTOR VEHICLE 3`))
+```
+
+
+```{r}
+accidents <- accidents %>% select(-c(`VEHICLE TYPE CODE 5`,`CONTRIBUTING FACTOR VEHICLE 5`,
+                                     `VEHICLE TYPE CODE 4`,`CONTRIBUTING FACTOR VEHICLE 4`,
+                                     `VEHICLE TYPE CODE 3`,`CONTRIBUTING FACTOR VEHICLE 3`,
+                                     `OFF STREET NAME`))
+
+```
+
+
+```{r, fig.height=10, fig.width=10}
+library(extracat)
+visna(accidents)
+
+```
+```{r}
+accidents <- accidents %>% 
+  mutate(DATE2 = as.Date(DATE, format='%m/%d/%Y')) %>% 
+  arrange(DATE2) %>% 
+  mutate(YEAR = format(DATE2, "%Y"))
+```
+
+```{r}
+accidents_missing <- accidents %>% 
+  mutate(MISSING_BOROUGH=1*is.na(BOROUGH), 
+         MISSING_CONTRIBUTION_INFO=1*is.na(`CONTRIBUTING FACTOR VEHICLE 1`)) %>%
+  select(MISSING_BOROUGH, MISSING_CONTRIBUTION_INFO, YEAR, BOROUGH)
+
+missing_borough_by_year <- accidents_missing %>%
+  group_by(YEAR) %>% summarise(pc_missing_borough=mean(MISSING_BOROUGH))
+
+missing_contrib_by_year <- accidents_missing %>%
+  group_by(YEAR) %>% summarise(pc_missing_contrib=mean(MISSING_CONTRIBUTION_INFO))
+
+missing_contrib_by_borough <- accidents_missing %>%
+  group_by(BOROUGH) %>% summarise(pc_missing_contrib=mean(MISSING_CONTRIBUTION_INFO))
+
+missing_borough_by_year
+missing_contrib_by_year
+missing_contrib_by_borough
+```
+
+```{r}
+ggplot(data=missing_borough_by_year, aes(x=YEAR, y=pc_missing_borough)) + geom_col()
+```
+
+```{r}
+ggplot(data=missing_contrib_by_year, aes(x=YEAR, y=pc_missing_contrib)) + geom_col()
+```
+
+```{r}
+ggplot(data=missing_contrib_by_borough, aes(x=BOROUGH, y=pc_missing_contrib)) + geom_col()
+```
+
+```{r}
+
+names(accidents)
+```
+
+```{r}
+accidents_by_zipcode <- accidents %>% 
+  group_by(`ZIP CODE`) %>% 
+  summarise(NUMBER_OF_ACCIDENTS = n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`), 
+            NUMBER_OF_INJURIES = sum(`NUMBER OF PERSONS INJURED`))
+
+```
+
+
+```{r}
+
+
+accidents_per_day <- accidents %>%
+  group_by(DATE2, BOROUGH) %>%
+  summarise(NUMBER_OF_ACCIDENTS=n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`), 
+            NUMBER_OF_INJURIES = sum(`NUMBER OF PERSONS INJURED`)) %>%
+  filter(NUMBER_OF_ACCIDENTS<400) # Remove one outlier point 
+```
+
+```{r}
+ggplot(accidents_per_day, aes(x=DATE2, y=NUMBER_OF_ACCIDENTS)) + geom_line(aes(colour="Accidents")) +
+  geom_smooth(method = "loess", span = .2, se = TRUE, show.legend = TRUE, aes(colour="Trend")) +
+  scale_colour_manual(name="Legend", values=c("black", "blue")) +
+  xlab("Time") + ylab("Number of Daily Accidents") +
+  ggtitle("Daily Accidents") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r, fig.height=10, fig.width=8}
+accidents_by_reason <- accidents %>%
+  group_by(`CONTRIBUTING FACTOR VEHICLE 1`,`CONTRIBUTING FACTOR VEHICLE 2`) %>%
+  summarise(NUMBER_OF_ACCIDENTS=n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`))
+
+ggplot(data=accidents_by_reason, aes(x=`CONTRIBUTING FACTOR VEHICLE 1`, y=NUMBER_OF_ACCIDENTS)) + geom_col() + coord_flip()
+```
+
+
+
+--END--
