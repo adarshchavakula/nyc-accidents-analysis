@@ -1,0 +1,126 @@
+---
+title: "NYC Motor Vehicle Collisions"
+output:
+  html_document:
+    df_print: paged
+---
+
+## 1. Introduction
+
+We chose the NYC Open Dataset for NYPD Motor Vehicle Collisions . This is an open source dataset updated on a daily basis that tracks all road accidents in New York City. We want to use this dataset to infer trends about the various factors that cause accidents. A key question we wish to answer is **Can we provide insights to help make the streets of NYC safer?** Understanding the various reasons for accidents can certainly help us answer this question. For example, one of the things we want to identify are the “hotspots” - intersections, streets etc where most accidents occur. This is could be a useful insight for authorities to take to necessary actions to remediate this.
+
+#### Questions of Interest
+
+1. **Location**: What boroughs have the highest distribution of accidents? Which locations (intersections, streets) are the hotspots for accidents? Why do some zip codes have more accidents?
+
+2. **Time**: What time of the day is prone to accidents? Which kinds of accidents are more likely to happen during a certain time of day.(eg. are pedestrians more likely to get hit at night?) How has accident frequency and deaths changed over time (months and years)? 
+
+3. **Accident Information**:  What are the main factors contributing to accidents? What are the types of Vehicles that cause more accidents? Is there a relation between the kind of vehicle and the accident location? What are the causes of accident in different vehicle types? Which mode of transportation is more likely to get involved in an accident? What are the main reasons behind accidents at hotspots (ex. inattentive driver?)
+
+4. **Misc**: What has been going on around Columbia? Any intersections around Columbia we need to be wary of? Am I safer if I walk on Amsterdam instead of Broadway maybe?? 
+
+
+#### Team Members and Contributions
+
+1. Aakanksha Joshi - aj2771
+2. Adarsh Chavakula - ac4244
+3. Deepak Maran - dm3308
+4. Harsheel Singh Soin - hss2148
+
+## Description of the data
+
+The data was collected from the NYC Open Data website. It provides information on the exact location, borough, time, cause, type of vehicles, number of deaths and injuries for every accident. The data is from 2012 to the first quarter of 2018. This data is collected by the police department (NYPD) because the NYC Council passed a local law in 2011. The data is manually run every month and reviewed by the TrafficStat unit before being posted on the NYPD website. 
+
+Each record represents a collision in NYC by borough, precinct and cross street. The data can potentially provide insights into how dangerous or safe certain intersections in NYC are. The information is available in both pdf and excel formats. 
+
+We downloaded the CSV file from the NYC Open Data webpage for this dataset. The dataset is updated on a daily basis (during weekdays). For the sake of uniformity and consistency of analyses, we used the accident data collected upto March 13, 2018. 
+
+**Features**: The dataset is 1.22 million rows and 29 columns (260 MB). The columns cover key aspects of every accident: Date, Time, Borough, Zip Code, Latitude, Longitude, Location, On Street Name, Cross Street Name, Number of Persons Injured, Number of Persons Killed, Number of Pedestrians Injured, Number of Pedestrians Killed, Number of Cyclist Injured, Number of Cyclist Killed, Number of Motorist Injured, Number of Motorist Killed etc. 
+
+```{r eda, message=FALSE, warning=FALSE, results='hide'}
+library(tidyverse)
+accidents <- read_csv("NYPD_Motor_Vehicle_Collisions.csv")
+```
+
+```{r}
+names(accidents)
+```
+
+```{r}
+head(accidents)
+```
+
+**Noteworthy features:** It is interesting how much detail NYPD has gone into while recording this information about each accident, so much that upto 5 vehicles contributing to an accident are noted, along with their corresponding vehicle codes, the street intersections are noted along with exact latitude and longitude information. They’ve also recorded extra information such as the number of cyclists and pedestrians killed as a result of the collision/accident. 
+
+## Analysis of Data Quality 
+
+We started with the analysis of missing values across the variables. Our first step was to use the `skim` function in the `skimr` package to get the percentage of missing values across the variables. 
+
+```{r}
+skimr::skim(accidents) %>% filter(stat == "missing") %>%
+arrange(desc(value)) %>% select(variable, type, value) %>% mutate(percent = value/nrow(accidents))
+```
+
+We observe that variables like `CONTRIBUTING FACTOR VEHICLE 5`, `VEHICLE TYPE CODE 5` etc have the highest missing values - over 99%. These variables correspond to description of accidents involving as high as 5 vehicles, which would happen in very few cases. 
+
+It is noteworthy that variables like `BOROUGH` and `ZIP CODE` have about 28% missing values. 
+
+Since most of the observations do not have variables `CONTRIBUTING FACTOR VEHICLE 5`, `VEHICLE TYPE CODE 5` etc, we decided to drop them. To avoid loss of useful information from this, we created a new binary variable which indicates if 3 or more vehicles were involved in an accident.
+
+```{r}
+accidents <- accidents %>% mutate(VEHICLES_INVOLVED_GTE3 = 1 * !is.na(`CONTRIBUTING FACTOR VEHICLE 3`))
+accidents <- accidents %>% select(-c(`VEHICLE TYPE CODE 5`,`CONTRIBUTING FACTOR VEHICLE 5`,
+                                     `VEHICLE TYPE CODE 4`,`CONTRIBUTING FACTOR VEHICLE 4`,
+                                     `VEHICLE TYPE CODE 3`,`CONTRIBUTING FACTOR VEHICLE 3`,
+                                     `OFF STREET NAME`))
+
+```
+
+Our next step is to identify if the values are missing at random. The `visna` function in the `extracat` library is useful for that.
+
+```{r}
+library(extracat)
+visna(accidents)
+```
+
+We observe that several variables do not have any missing values. It is more informative to do the `visna` considering a subset of the variables that have missing values.
+
+```{r}
+accidents_sub <- accidents %>% select(BOROUGH,`ZIP CODE`,LOCATION,
+                                      `ON STREET NAME`, `CROSS STREET NAME`, 
+                                      `CONTRIBUTING FACTOR VEHICLE 1`,`VEHICLE TYPE CODE 1`)
+visna(accidents_sub)
+```
+
+We wanted to see how the quality of the data has been changing over time. Our initial hypothesis for the missing values is that the data collection process might not have been great when the NYC Open Data portal started and might have imporved over the years. However, the data suggests otherwise:
+
+```{r}
+accidents <- accidents %>% 
+  mutate(DATE = as.Date(DATE, format='%m/%d/%Y')) %>% 
+  arrange(DATE) %>% 
+  mutate(YEAR = format(DATE, "%Y"))
+
+accidents_missing <- accidents %>% 
+  mutate(MISSING_BOROUGH=1*is.na(BOROUGH), 
+         MISSING_CONTRIBUTION_INFO=1*is.na(`CONTRIBUTING FACTOR VEHICLE 1`)) %>%
+  select(MISSING_BOROUGH, MISSING_CONTRIBUTION_INFO, YEAR, BOROUGH)
+
+missing_borough_by_year <- accidents_missing %>%
+  group_by(YEAR) %>% summarise(pc_missing_borough=mean(MISSING_BOROUGH))
+
+missing_contrib_by_year <- accidents_missing %>%
+  group_by(YEAR) %>% summarise(pc_missing_contrib=mean(MISSING_CONTRIBUTION_INFO))
+
+missing_contrib_by_borough <- accidents_missing %>%
+  group_by(BOROUGH) %>% summarise(pc_missing_contrib=mean(MISSING_CONTRIBUTION_INFO))
+```
+
+```{r}
+ggplot(data=missing_borough_by_year, aes(x=YEAR, y=pc_missing_borough)) + geom_col(fill="lightblue", color="black") +
+  xlab("Year") + ylab("% Missing Borough Information") +
+  ggtitle("% Missing Borough Information vs Year") +
+  theme(plot.title = element_text(hjust = 0.5))
+  
+```
+
+It appears that the quality of the data has been deteriorating over time. 2012 had only about 23% missing Borough information while 2017 was close to 40%.
