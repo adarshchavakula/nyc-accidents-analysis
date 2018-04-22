@@ -1,0 +1,327 @@
+---
+title: "EDA"
+output:
+  html_document:
+    df_print: paged
+---
+
+Read dataset
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r eda, message=FALSE, warning=FALSE, results='hide'}
+library(tidyverse)
+accidents <- read_csv("NYPD_Motor_Vehicle_Collisions.csv")
+```
+
+Look at data
+
+```{r}
+tail(accidents)
+
+```
+
+```{r}
+str(accidents)
+```
+## Missing Quality Analysis
+
+
+```{r}
+library(skimr)
+skimr::skim(accidents) %>% filter(stat == "missing") %>%
+arrange(desc(value)) %>% select(variable, type, value) %>% mutate(percent = value/nrow(accidents))
+
+```
+```{r}
+accidents <- accidents %>% mutate(VEHICLES_INVOLVED_GTE3 = 1 * !is.na(`CONTRIBUTING FACTOR VEHICLE 3`))
+```
+
+
+```{r}
+accidents <- accidents %>% select(-c(`VEHICLE TYPE CODE 5`,`CONTRIBUTING FACTOR VEHICLE 5`,
+                                     `VEHICLE TYPE CODE 4`,`CONTRIBUTING FACTOR VEHICLE 4`,
+                                     `VEHICLE TYPE CODE 3`,`CONTRIBUTING FACTOR VEHICLE 3`,
+                                     `OFF STREET NAME`))
+
+```
+
+
+```{r, fig.height=10, fig.width=10}
+#install.packages('extracat')
+library(extracat)
+visna(accidents)
+
+```
+```{r}
+accidents <- accidents %>% 
+  mutate(DATE2 = as.Date(DATE, format='%m/%d/%Y')) %>% 
+  arrange(DATE2) %>% 
+  mutate(YEAR = format(DATE2, "%Y"))
+```
+
+```{r}
+accidents_missing <- accidents %>% 
+  mutate(MISSING_BOROUGH=1*is.na(BOROUGH), 
+         MISSING_CONTRIBUTION_INFO=1*is.na(`CONTRIBUTING FACTOR VEHICLE 1`)) %>%
+  select(MISSING_BOROUGH, MISSING_CONTRIBUTION_INFO, YEAR, BOROUGH)
+
+missing_borough_by_year <- accidents_missing %>%
+  group_by(YEAR) %>% summarise(pc_missing_borough=mean(MISSING_BOROUGH))
+
+missing_contrib_by_year <- accidents_missing %>%
+  group_by(YEAR) %>% summarise(pc_missing_contrib=mean(MISSING_CONTRIBUTION_INFO))
+
+missing_contrib_by_borough <- accidents_missing %>%
+  group_by(BOROUGH) %>% summarise(pc_missing_contrib=mean(MISSING_CONTRIBUTION_INFO))
+
+missing_borough_by_year
+missing_contrib_by_year
+missing_contrib_by_borough
+```
+
+```{r}
+ggplot(data=missing_borough_by_year, aes(x=YEAR, y=pc_missing_borough)) + geom_col()
+```
+
+```{r}
+ggplot(data=missing_contrib_by_year, aes(x=YEAR, y=pc_missing_contrib)) + geom_col()
+```
+
+```{r}
+ggplot(data=missing_contrib_by_borough, aes(x=BOROUGH, y=pc_missing_contrib)) + geom_col()
+```
+
+```{r}
+
+names(accidents)
+```
+
+```{r}
+accidents_by_zipcode <- accidents %>% 
+  group_by(`ZIP CODE`) %>% 
+  summarise(NUMBER_OF_ACCIDENTS = n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`), 
+            NUMBER_OF_INJURIES = sum(`NUMBER OF PERSONS INJURED`))
+
+```
+
+
+```{r}
+
+
+accidents_per_day <- accidents %>%
+  group_by(DATE2, BOROUGH) %>%
+  summarise(NUMBER_OF_ACCIDENTS=n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`), 
+            NUMBER_OF_INJURIES = sum(`NUMBER OF PERSONS INJURED`)) %>%
+  filter(NUMBER_OF_ACCIDENTS<400) # Remove one outlier point 
+```
+
+```{r}
+ggplot(accidents_per_day, aes(x=DATE2, y=NUMBER_OF_ACCIDENTS)) + geom_line(aes(colour="Accidents")) +
+  geom_smooth(method = "loess", span = .2, se = TRUE, show.legend = TRUE, aes(colour="Trend")) +
+  scale_colour_manual(name="Legend", values=c("black", "blue")) +
+  xlab("Time") + ylab("Number of Daily Accidents") +
+  ggtitle("Daily Accidents") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+```{r}
+print("Number of missing values in `CONTRIBUTING FACTOR VEHICLE 1`")
+print(sum(is.na(accidents$`CONTRIBUTING FACTOR VEHICLE 1`)))
+
+print("Number of missing values in `CONTRIBUTING FACTOR VEHICLE 2`")
+print(sum(is.na(accidents$`CONTRIBUTING FACTOR VEHICLE 2`)))
+```
+
+`CONTRIBUTING FACTOR VEHICLE 1` has much fewer missing values than `CONTRIBUTING FACTOR VEHICLE 2`. Analyzing them separately for the purpose of better analyses
+
+```{r}
+checkContrFact1_2 <- accidents %>% filter(!is.na(`CONTRIBUTING FACTOR VEHICLE 1`) & !is.na(`CONTRIBUTING FACTOR VEHICLE 2`)) %>% filter(`CONTRIBUTING FACTOR VEHICLE 1` != "Unspecified" & `CONTRIBUTING FACTOR VEHICLE 2` != "Unspecified") %>% mutate(sameValue = `CONTRIBUTING FACTOR VEHICLE 1`==`CONTRIBUTING FACTOR VEHICLE 2`) 
+print("Number of records where `CONTRIBUTING FACTOR VEHICLE 1` equals `CONTRIBUTING FACTOR VEHICLE 2`:")
+print(sum(checkContrFact1_2$sameValue))
+```
+
+Upon analyzing `CONTRIBUTING FACTOR VEHICLE 1` and `CONTRIBUTING FACTOR VEHICLE 2` columns after omitting records containing NAs and also only considering records where both `CONTRIBUTING FACTOR VEHICLE 1` and `CONTRIBUTING FACTOR VEHICLE 2` are specified, we observe that *98407* records out of *160161* have the same entry for these two columns.
+
+
+```{r}
+accidents_by_reason_1 <- accidents %>% filter(!is.na(`CONTRIBUTING FACTOR VEHICLE 1`)) %>% filter(`CONTRIBUTING FACTOR VEHICLE 1` != "Unspecified") %>% group_by(`CONTRIBUTING FACTOR VEHICLE 1`) %>%
+  summarise(NUMBER_OF_ACCIDENTS=n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`)) %>%
+  arrange(desc(NUMBER_OF_ACCIDENTS))
+
+accidents_by_reason_1 <- head(accidents_by_reason_1, n = 10)
+
+ggplot(accidents_by_reason_1, aes(x=reorder(`CONTRIBUTING FACTOR VEHICLE 1`, `NUMBER_OF_ACCIDENTS`), y=`NUMBER_OF_ACCIDENTS`)) + geom_col() + xlab("Contributing Factor Vehicle 1")+ylab("Number of Accidents")+ggtitle("Top 10 First Contributing Factors by Accident Count")+theme(plot.title = element_text(hjust = 0.5))+coord_flip()
+```
+
+```{r}
+accidents_by_reason_2 <- accidents %>% filter(!is.na(`CONTRIBUTING FACTOR VEHICLE 2`)) %>% filter(`CONTRIBUTING FACTOR VEHICLE 2` != "Unspecified") %>% group_by(`CONTRIBUTING FACTOR VEHICLE 2`) %>%
+  summarise(NUMBER_OF_ACCIDENTS=n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`)) %>%
+  arrange(desc(NUMBER_OF_ACCIDENTS))
+
+accidents_by_reason_2 <- head(accidents_by_reason_2, n = 10)
+
+ggplot(accidents_by_reason_2, aes(x=reorder(`CONTRIBUTING FACTOR VEHICLE 2`, `NUMBER_OF_ACCIDENTS`), y=`NUMBER_OF_ACCIDENTS`)) + geom_col() + xlab("Contributing Factor Vehicle 2")+ylab("Number of Accidents")+ggtitle("Top 10 Second Contributing Factors by Accident Count")+theme(plot.title = element_text(hjust = 0.5))+coord_flip()
+```
+
+```{r, fig.height=10, fig.width=10}
+accidents_by_reasons <- accidents %>% filter(!is.na(`CONTRIBUTING FACTOR VEHICLE 1`) & !is.na(`CONTRIBUTING FACTOR VEHICLE 2`)) %>% filter(`CONTRIBUTING FACTOR VEHICLE 1` != "Unspecified" & `CONTRIBUTING FACTOR VEHICLE 2` != "Unspecified") %>% group_by(`CONTRIBUTING FACTOR VEHICLE 1`,`CONTRIBUTING FACTOR VEHICLE 2`) %>%
+  summarise(NUMBER_OF_ACCIDENTS=n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`)) %>%
+  arrange(desc(NUMBER_OF_ACCIDENTS))
+
+accidents_by_reasons <- head(accidents_by_reasons, n = 50)
+
+ggplot(accidents_by_reasons, aes(x = `CONTRIBUTING FACTOR VEHICLE 1`, y = `CONTRIBUTING FACTOR VEHICLE 2`, fill = NUMBER_OF_ACCIDENTS)) + theme(axis.text.x = element_text(angle = 90, hjust = 1))+geom_tile()+xlab("Contributing Factor Vehicle 1")+ylab("Contributing Factor Vehicle 2")+ggtitle("Number of Accidents by combinations of Contributing Factors of Vehicles")+theme(plot.title = element_text(hjust = 0.5))+viridis::scale_fill_viridis()
+```
+
+
+
+```{r}
+print("Number of missing values in `VEHICLE TYPE CODE 1`")
+print(sum(is.na(accidents$`VEHICLE TYPE CODE 1`)))
+
+print("Number of missing values in `VEHICLE TYPE CODE 2`")
+print(sum(is.na(accidents$`VEHICLE TYPE CODE 2`)))
+```
+
+
+```{r}
+accidents_by_vehicle_1 <- accidents %>% 
+  filter(!is.na(`VEHICLE TYPE CODE 1`)) %>%  
+  filter(`VEHICLE TYPE CODE 1` != "UNKNOWN") %>%
+  group_by(`VEHICLE TYPE CODE 1`) %>%
+  summarise(NUMBER_OF_ACCIDENTS=n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`)) %>% arrange(desc(NUMBER_OF_ACCIDENTS))
+
+accidents_by_vehicle_1 <- head(accidents_by_vehicle_1, n=10)
+ggplot(data=accidents_by_vehicle_1, aes(x=reorder(`VEHICLE TYPE CODE 1`, `NUMBER_OF_ACCIDENTS`), y=NUMBER_OF_ACCIDENTS)) + geom_col() + xlab("First Vehicle Type")+ylab("Number of Accidents")+ggtitle("Top 10 First Vehicle Types by Accident Count")+theme(plot.title = element_text(hjust = 0.5))+coord_flip()
+```
+
+```{r}
+accidents_by_vehicle_2 <- accidents %>% 
+  filter(!is.na(`VEHICLE TYPE CODE 2`)) %>%  
+  filter(`VEHICLE TYPE CODE 2` != "UNKNOWN") %>%
+  group_by(`VEHICLE TYPE CODE 2`) %>%
+  summarise(NUMBER_OF_ACCIDENTS=n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`)) %>% arrange(desc(NUMBER_OF_ACCIDENTS))
+
+accidents_by_vehicle_2 <- head(accidents_by_vehicle_2, n=10)
+ggplot(data=accidents_by_vehicle_2, aes(x=reorder(`VEHICLE TYPE CODE 2`, `NUMBER_OF_ACCIDENTS`), y=NUMBER_OF_ACCIDENTS)) + geom_col() + xlab("Second Vehicle Type")+ylab("Number of Accidents")+ggtitle("Top 10 Second Vehicle Types by Accident Count")+theme(plot.title = element_text(hjust = 0.5))+coord_flip()
+```
+
+```{r, fig.height=10, fig.width=10}
+accidents_by_vehicles <- accidents %>% filter(!is.na(`VEHICLE TYPE CODE 1`) & !is.na(`VEHICLE TYPE CODE 2`)) %>% filter(`VEHICLE TYPE CODE 1` != "UNKNOWN" & `VEHICLE TYPE CODE 2` != "UNKNOWN") %>% group_by(`VEHICLE TYPE CODE 1`,`VEHICLE TYPE CODE 2`) %>%
+  summarise(NUMBER_OF_ACCIDENTS=n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`)) %>%
+  arrange(desc(NUMBER_OF_ACCIDENTS))
+
+accidents_by_vehicles <- head(accidents_by_vehicles, n = 50)
+
+ggplot(accidents_by_vehicles, aes(x = `VEHICLE TYPE CODE 1`, y = `VEHICLE TYPE CODE 2`, fill = NUMBER_OF_ACCIDENTS)) + theme(axis.text.x = element_text(angle = 90, hjust = 1))+geom_tile()+xlab("First Vehicle Type")+ylab("Second Vehicle Type")+ggtitle("Number of Accidents by combinations of Vehicle Types")+theme(plot.title = element_text(hjust = 0.5))+viridis::scale_fill_viridis()
+```
+
+
+```{r, fig.height=10, fig.width=10, warning=FALSE,message=FALSE}
+library(ggmap)
+accidents_by_reasons_map <- head(accidents_by_reasons, n=5)
+accidents_topCF12 <- accidents %>%
+  filter(`CONTRIBUTING FACTOR VEHICLE 1` %in% accidents_by_reasons_map$`CONTRIBUTING FACTOR VEHICLE 1` & `CONTRIBUTING FACTOR VEHICLE 2` %in% accidents_by_reasons_map$`CONTRIBUTING FACTOR VEHICLE 2`) %>% filter(!is.na(LATITUDE) & !is.na(LONGITUDE)) %>% filter(BOROUGH=='MANHATTAN')
+
+qmap('new york city', zoom = 12,color = 'bw', legend = 'topleft') + geom_point(aes(x=LONGITUDE, y=LATITUDE, color=`CONTRIBUTING FACTOR VEHICLE 1`), data=accidents_topCF12,alpha=0.7, size=1) + viridis::scale_color_viridis(discrete=TRUE)+ggtitle("Spatial View of Accidents by Top 5 Contributing Factors in Manhattan")+theme(plot.title = element_text(hjust = 0.5, size=15))
+ 
+```
+
+
+```{r, fig.height=20, fig.width=20, warning=FALSE,message=FALSE}
+#nyc <- get_map(location = "new york", zoom = 12, color = "bw")
+#NYMap <- ggmap(nyc, base_layer = ggplot(aes(x = LONGITUDE, y = LATITUDE),
+#data = accidents_topCF12)) + geom_point(aes(x=LONGITUDE, y=LATITUDE, color=`NUMBER OF PERSONS KILLED`), data=accidents_topCF12,alpha=0.1, size=0.7)+ scale_colour_gradient(low = "red", high = "blue")+facet_wrap(~ `CONTRIBUTING FACTOR VEHICLE 1`, nrow=3)+theme(panel.spacing.x=unit(2, "lines"),panel.spacing.y=unit(2, "lines"))
+
+qmap('manhattan', zoom = 13,color = 'bw', legend = 'topleft') + geom_point(aes(x=LONGITUDE, y=LATITUDE, color=`NUMBER OF PERSONS KILLED`), data=accidents_topCF12,alpha=0.7, size=1.0) + viridis::scale_color_viridis()+ggtitle("Spatial View of Accidents by Top 5 Contributing Factors in Manhattan")+theme(plot.title = element_text(hjust = 0.5, size=22))+geom_density_2d(aes(x=LONGITUDE, y=LATITUDE, color=`NUMBER OF PERSONS KILLED`), data=accidents_topCF12, color="red")+facet_wrap(~ `CONTRIBUTING FACTOR VEHICLE 1`, nrow=3)+theme(panel.spacing.x=unit(2, "lines"),panel.spacing.y=unit(2, "lines"))
+
+```
+
+
+
+```{r}
+accidents_by_vehicles_new <- head(accidents_by_vehicles, n=10)
+accidents_by_reasons_new <- head(accidents_by_reasons, n=10)
+
+accidents_cf_vt <- accidents %>% 
+  filter(!is.na(`VEHICLE TYPE CODE 1`) & !is.na(`CONTRIBUTING FACTOR VEHICLE 1`)) %>%  
+  filter(`VEHICLE TYPE CODE 1` != "UNKNOWN" & `CONTRIBUTING FACTOR VEHICLE 1`!= "Unspecified") %>% filter(`VEHICLE TYPE CODE 1` %in% accidents_by_vehicles_new$`VEHICLE TYPE CODE 1`) %>% filter(`CONTRIBUTING FACTOR VEHICLE 1` %in% accidents_by_reasons_new$`CONTRIBUTING FACTOR VEHICLE 1`) %>% group_by(`VEHICLE TYPE CODE 1`, `CONTRIBUTING FACTOR VEHICLE 1`) %>%
+  summarise(NUMBER_OF_ACCIDENTS=n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`)) %>%
+  arrange(desc(NUMBER_OF_ACCIDENTS))
+head(accidents_cf_vt,n=10)
+```
+
+```{r, fig.height=5, fig.width=10, warning=FALSE}
+ggplot(accidents_cf_vt, aes(y = `VEHICLE TYPE CODE 1`, x = `CONTRIBUTING FACTOR VEHICLE 1`, fill = NUMBER_OF_ACCIDENTS)) + theme(axis.text.x = element_text(angle = 90, hjust = 1))+geom_tile()+xlab("Contributing Factor Vehicle 1")+ylab("Vehicle Type 1")+ggtitle("Number of Accidents by combinations of First Vehicle Types and corresponding Contributing Factors")+theme(plot.title = element_text(hjust = 0.5))+viridis::scale_fill_viridis()
+```
+
+
+```{r}
+accidents_cf_vt2 <- accidents %>% 
+  filter(!is.na(`VEHICLE TYPE CODE 2`) & !is.na(`CONTRIBUTING FACTOR VEHICLE 2`)) %>%  
+  filter(`VEHICLE TYPE CODE 2` != "UNKNOWN" & `CONTRIBUTING FACTOR VEHICLE 2`!= "Unspecified") %>% filter(`VEHICLE TYPE CODE 2` %in% accidents_by_vehicles_new$`VEHICLE TYPE CODE 2`) %>% filter(`CONTRIBUTING FACTOR VEHICLE 2` %in% accidents_by_reasons_new$`CONTRIBUTING FACTOR VEHICLE 2`) %>% group_by(`VEHICLE TYPE CODE 2`, `CONTRIBUTING FACTOR VEHICLE 2`) %>%
+  summarise(NUMBER_OF_ACCIDENTS=n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`)) %>%
+  arrange(desc(NUMBER_OF_ACCIDENTS))
+head(accidents_cf_vt2,n=10)
+```
+
+```{r, fig.height=5, fig.width=10, warning=FALSE}
+ggplot(accidents_cf_vt2, aes(y = `VEHICLE TYPE CODE 2`, x = `CONTRIBUTING FACTOR VEHICLE 2`, fill = NUMBER_OF_ACCIDENTS)) + theme(axis.text.x = element_text(angle = 90, hjust = 1))+geom_tile()+xlab("Contributing Factor Vehicle 2")+ylab("Vehicle Type 2")+ggtitle("Number of Accidents by combinations of Second Vehicle Types and corresponding Contributing Factors")+theme(plot.title = element_text(hjust = 0.5))+viridis::scale_fill_viridis()
+```
+
+
+```{r}
+accidents_zip <- accidents %>% filter(!is.na(`ZIP CODE`)) %>% filter(BOROUGH=="MANHATTAN") %>% group_by(`ZIP CODE`) %>% summarise(NUMBER_OF_ACCIDENTS=n()) 
+names(accidents_zip) <- c("region", "value")
+accidents_zip$region <- factor(accidents_zip$region)
+head(accidents_zip,n=10)
+
+```
+
+
+```{r, fig.height=5, fig.width=5, message=FALSE}
+#install.packages("devtools")
+#install_github('arilamstein/choroplethrZip@v1.3.0')
+library(devtools)
+library(ggplot2)
+library(choroplethrZip)
+
+zip_choropleth(accidents_zip,
+               state_zoom = "new york",
+               county_zoom = 36061,
+               title      = "Accidents by Zip Code in Manhattan",
+               legend     = "Number of Accidents") +theme(plot.title = element_text(hjust = 0.5, size=15))+viridis::scale_fill_viridis(discrete = TRUE)+coord_map()
+```
+
+```{r, fig.height=5,fig.width=6,message=FALSE,warning=FALSE}
+accidents_zip_other <- accidents %>% filter(!is.na(`ZIP CODE`)) %>% group_by(`ZIP CODE`,BOROUGH) %>% summarise(NUMBER_OF_ACCIDENTS=n())
+
+names(accidents_zip_other) <- c("region", "BOROUGH","value") 
+accidents_zip_other$region <- factor(accidents_zip_other$region)
+accidents_zip_other <- accidents_zip_other[!duplicated(accidents_zip_other$region),]
+
+zip_choropleth(accidents_zip_other,
+               state_zoom = "new york",
+               county_zoom = c(36005,36047,36061,36081,36085),
+               title      = "Accidents by Zip Code in New York City",
+               legend     = "Number of Accidents") +theme(plot.title = element_text(hjust = 0.5, size=15))+viridis::scale_fill_viridis(discrete = TRUE)+coord_map()
+```
+
+
+
+--END--
