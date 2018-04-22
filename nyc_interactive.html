@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>NYC Accident Data</title>
+    <script src="https://d3js.org/d3.v4.min.js">  </script>
+
+  </head>
+  <body>
+
+    <h1>Select to Choose Year</h1>
+    <select id="year-dropdown">
+      <option value="2018">2018</option>
+      <option value="2017">2017</option>
+      <option value="2016">2016</option>
+      <option value="2015">2015</option>
+      <option value="2014">2014</option>
+      <option value="2013">2013</option>
+      <option value="2012">2012</option>
+    </select>
+    <p id="selected-dropdown">2018</p>
+
+    <script type="text/javascript">
+
+      //Width and height
+      var w = 700;
+      var h = 500;
+      var margin = {top: 50, right: 50, bottom: 50, left: 50};
+      var innerHeight = h - margin.top - margin.bottom;
+      var innerWidth = w - margin.left - margin.right;
+
+      var dataset = [{borough: "Manhattan", count2018: 5291, count2017: 31487, count2016: 36766, count2015: 42517, count2014: 41262, count2013: 41578, count2012: 20719},
+                     {borough: "Brooklyn", count2018: 7887, count2017: 44631, count2016: 47698, count2015: 50843, count2014: 47758, count2013: 47016, count2012: 23302},
+                     {borough: "Queens", count2018: 7098, count2017: 38377, count2016: 41556, count2015: 42484, count2014: 41019, count2013: 39310, count2012: 20719},
+                     {borough: "Bronx", count2018: 3926, count2017: 21187, count2016: 21704, count2015: 21251, count2014: 19687, count2013: 19768, count2012: 19139},
+                     {borough: "Staten Island", count2018: 1034, count2017: 6212, count2016: 6720, count2015: 6344, count2014: 6614, count2013: 8295, count2012: 4902}];
+
+       var max2018 = d3.max(dataset, function(d) {return d.count2018;})
+       var max2017 = d3.max(dataset, function(d) {return d.count2017;})
+       var max2016 = d3.max(dataset, function(d) {return d.count2016;})
+       var max2015 = d3.max(dataset, function(d) {return d.count2015;})
+       var max2014 = d3.max(dataset, function(d) {return d.count2014;})
+       var max2013 = d3.max(dataset, function(d) {return d.count2013;})
+       var max2012 = d3.max(dataset, function(d) {return d.count2012;})
+       var all_max = [max2018, max2017, max2016, max2015, max2014, max2013, max2012]
+
+       fin_max = d3.max(all_max)
+
+        var svg = d3.select("body")
+          .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+
+        svg.append("rect")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", w)
+            .attr("height", h)
+            .attr("fill", "lightgreen");
+
+        var xScale = d3.scaleBand()
+            .domain(dataset.map(function(d) {return d.borough;}))
+            .range([0, innerWidth]);
+
+        var yScale = d3.scaleLinear()
+            .domain([0, fin_max])
+            .range([innerHeight, 0]);
+
+        var xAxis = d3.axisBottom()
+            .scale(xScale);
+
+        var yAxis = d3.axisLeft()
+             .scale(yScale);
+
+        var bars = svg.append("g")
+            .attr("id", "plot")
+            .attr("transform", `translate (${margin.left}, ${margin.top})`)
+            .selectAll("rect")
+            .data(dataset);
+
+        bars.enter().append("rect")
+            .attr("x", (d, i) => xScale(d.borough)+35)
+            .attr("y", d => yScale(d.count2018))
+            .attr("width", "50")
+            .attr("height", d => innerHeight - yScale(d.count2018))
+            .attr("fill", "black")
+            // .on("mouseover", mouseOver)
+            // .on("mouseout", mouseOut);
+
+        svg.append("g")
+            .attr("class", "xAxis")
+            .attr("transform", `translate (${margin.left}, ${h - margin.top})`)
+            .call(xAxis);
+
+        svg.append("g")
+            .attr("class", "yAxis")
+            .attr("transform", `translate (${margin.left}, ${margin.top})`)
+            .call(yAxis);
+
+        currYear = 2018
+
+        // Region with some errors //
+
+        // function mouseOver(d, i) {
+        //   if (currYear == 2018) {
+        //       svg.append("text")
+        //       .attr("id", "value")
+        //       .attr("x", (d, i) => xScale(d.borough)+35)
+        //       .attr("y", d => innerHeight + 30 - yScale(d.count2018))
+        //       .text(function() {return [d.count2018];});
+        //     }
+        //   if (currYear == 2017) {
+        //       svg.append("text")
+        //       .attr("id", "value")
+        //       .attr("y", d => innerHeight + 30 - yScale(d.count2017))
+        //       .text(function() {return [d.count2017];});
+        //     }
+        //   if (currYear == 2016) {
+        //       svg.append("text")
+        //       .attr("id", "value")
+        //       .attr("y", d => innerHeight + 30 - yScale(d.count2016))
+        //       .text(function() {return [d.count2016];});
+        //     }
+        // if (currYear == 2015) {
+        //     svg.append("text")
+        //     .attr("id", "value")
+        //     .attr("y", d => innerHeight + 30 - yScale(d.count2015))
+        //     .text(function() {return [d.count2015];});
+        //   }
+        // if (currYear == 2014) {
+        //     svg.append("text")
+        //     .attr("id", "value")
+        //     .attr("y", d => innerHeight + 30 - yScale(d.count2014))
+        //     .text(function() {return [d.count2014];});
+        //   }
+        // if (currYear == 2013) {
+        //     svg.append("text")
+        //     .attr("id", "value")
+        //     .attr("y", d => innerHeight + 30 - yScale(d.count2013))
+        //     .text(function() {return [d.count2013];});
+        //   }
+        // if (currYear == 2012) {
+        //     svg.append("text")
+        //     .attr("id", "value")
+        //     .attr("y", d => innerHeight + 30 - yScale(d.count2012))
+        //     .text(function() {return [d.count2012];});
+        //   }
+        // }
+        // function mouseOut(d, i) {
+        //       d3.selectAll("#value").remove();
+        //   }
+
+      // End of Region with Errors //
+
+      </script>
+
+      <script>
+
+      d3.select("select")
+        .on("change",function(d) {
+          currYear = d3.select("#year-dropdown").node().value;
+
+          if (currYear == "2018")
+          {
+          d3.selectAll("g").selectAll("rect")
+              .transition()
+              .duration(2000)
+              .attr("y", d => yScale(d.count2018))
+              .attr("height", d => d => innerHeight - yScale(d.count2018))
+              d3.select("#selected-dropdown").text(currYear);
+          }
+
+          if (currYear == "2017")
+          {
+          d3.selectAll("g").selectAll("rect")
+              .transition()
+              .duration(2000)
+              .attr("y", d => yScale(d.count2017))
+              .attr("height", d => innerHeight - yScale(d.count2017))
+              d3.select("#selected-dropdown").text(currYear);
+          }
+
+          if (currYear == "2016")
+          {
+          d3.selectAll("g").selectAll("rect")
+              .transition()
+              .duration(2000)
+              .attr("y", d => yScale(d.count2016))
+              .attr("height", d => innerHeight - yScale(d.count2016))
+              d3.select("#selected-dropdown").text(currYear);
+          }
+
+          if (currYear == "2015")
+          {
+          d3.selectAll("g").selectAll("rect")
+              .transition()
+              .duration(2000)
+              .attr("y", d => yScale(d.count2015))
+              .attr("height", d => innerHeight - yScale(d.count2015))
+              d3.select("#selected-dropdown").text(currYear);
+          }
+
+          if (currYear == "2014")
+          {
+          d3.selectAll("g").selectAll("rect")
+              .transition()
+              .duration(2000)
+              .attr("y", d => yScale(d.count2014))
+              .attr("height", d => innerHeight - yScale(d.count2014))
+              d3.select("#selected-dropdown").text(currYear);
+          }
+
+          if (currYear == "2013")
+          {
+          d3.selectAll("g").selectAll("rect")
+              .transition()
+              .duration(2000)
+              .attr("y", d => yScale(d.count2013))
+              .attr("height", d => innerHeight - yScale(d.count2013))
+              d3.select("#selected-dropdown").text(currYear);
+          }
+
+          if (currYear == "2012")
+          {
+          d3.selectAll("g").selectAll("rect")
+              .transition()
+              .duration(2000)
+              .attr("y", d => yScale(d.count2012))
+              .attr("height", d => innerHeight - yScale(d.count2012))
+              d3.select("#selected-dropdown").text(currYear);
+          }
+      })
+
+      </script>
+
+  </body>
+</html>
