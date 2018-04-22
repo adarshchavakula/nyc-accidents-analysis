@@ -166,7 +166,7 @@
               .transition()
               .duration(2000)
               .attr("y", d => yScale(d.count2018))
-              .attr("height", d => d => innerHeight - yScale(d.count2018))
+              .attr("height", d => innerHeight - yScale(d.count2018))
               d3.select("#selected-dropdown").text(currYear);
           }
 
