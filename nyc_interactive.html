@@ -4,11 +4,12 @@
     <meta charset="utf-8">
     <title>NYC Accident Data</title>
     <script src="https://d3js.org/d3.v4.min.js">  </script>
-
   </head>
-  <body>
+  <body bgcolor="black">
 
-    <h1>Select to Choose Year</h1>
+    <h1 align="center" style="color: white"> New York Police Department Motor Vehicle Collisions </h1>
+    <h4 align="center" style="color: white"> A Borough-Wise Distribution of Accidents from 2012-2018 </h4>
+    <h2 style="color: white">Select Another Year</h2>
     <select id="year-dropdown">
       <option value="2018">2018</option>
       <option value="2017">2017</option>
@@ -18,13 +19,13 @@
       <option value="2013">2013</option>
       <option value="2012">2012</option>
     </select>
-    <p id="selected-dropdown">2018</p>
+    <p style="color: white" id="selected-dropdown">Quick Observation: The data contains information till 03/09/2018, and we can observe that the number of accidents in the three months is almost same across four of the boroughs, namely: Manhattan, Brooklyn, Queens and Bronx.</p>
 
     <script type="text/javascript">
 
       //Width and height
-      var w = 700;
-      var h = 500;
+      var w = 1200;
+      var h = 600;
       var margin = {top: 50, right: 50, bottom: 50, left: 50};
       var innerHeight = h - margin.top - margin.bottom;
       var innerWidth = w - margin.left - margin.right;
@@ -78,14 +79,15 @@
             .selectAll("rect")
             .data(dataset);
 
+
         bars.enter().append("rect")
-            .attr("x", (d, i) => xScale(d.borough)+35)
+            .attr("x", (d, i) => xScale(d.borough)+85)
             .attr("y", d => yScale(d.count2018))
             .attr("width", "50")
             .attr("height", d => innerHeight - yScale(d.count2018))
             .attr("fill", "black")
-            // .on("mouseover", mouseOver)
-            // .on("mouseout", mouseOut);
+            .on('mouseover', mouseOver)
+            .on('mouseout', mouseOut)
 
         svg.append("g")
             .attr("class", "xAxis")
@@ -99,58 +101,74 @@
 
         currYear = 2018
 
-        // Region with some errors //
-
-        // function mouseOver(d, i) {
-        //   if (currYear == 2018) {
-        //       svg.append("text")
-        //       .attr("id", "value")
-        //       .attr("x", (d, i) => xScale(d.borough)+35)
-        //       .attr("y", d => innerHeight + 30 - yScale(d.count2018))
-        //       .text(function() {return [d.count2018];});
-        //     }
-        //   if (currYear == 2017) {
-        //       svg.append("text")
-        //       .attr("id", "value")
-        //       .attr("y", d => innerHeight + 30 - yScale(d.count2017))
-        //       .text(function() {return [d.count2017];});
-        //     }
-        //   if (currYear == 2016) {
-        //       svg.append("text")
-        //       .attr("id", "value")
-        //       .attr("y", d => innerHeight + 30 - yScale(d.count2016))
-        //       .text(function() {return [d.count2016];});
-        //     }
-        // if (currYear == 2015) {
-        //     svg.append("text")
-        //     .attr("id", "value")
-        //     .attr("y", d => innerHeight + 30 - yScale(d.count2015))
-        //     .text(function() {return [d.count2015];});
-        //   }
-        // if (currYear == 2014) {
-        //     svg.append("text")
-        //     .attr("id", "value")
-        //     .attr("y", d => innerHeight + 30 - yScale(d.count2014))
-        //     .text(function() {return [d.count2014];});
-        //   }
-        // if (currYear == 2013) {
-        //     svg.append("text")
-        //     .attr("id", "value")
-        //     .attr("y", d => innerHeight + 30 - yScale(d.count2013))
-        //     .text(function() {return [d.count2013];});
-        //   }
-        // if (currYear == 2012) {
-        //     svg.append("text")
-        //     .attr("id", "value")
-        //     .attr("y", d => innerHeight + 30 - yScale(d.count2012))
-        //     .text(function() {return [d.count2012];});
-        //   }
-        // }
-        // function mouseOut(d, i) {
-        //       d3.selectAll("#value").remove();
-        //   }
-
-      // End of Region with Errors //
+        function mouseOver(d, i) {
+          if (currYear == 2018) {
+              d3.selectAll("g").selectAll("rect")
+              .append("text")
+              .attr("id", "value")
+              .attr("x", (d, i) => xScale(d.borough)+85)
+              .attr("y", function(d) {return yScale(d.count2018) + 10;})
+              .text(function(d) {return d.count2018;});
+              console.log(d.count2018, xScale(d.borough)+85, yScale(d.count2018) + 10)
+            }
+          if (currYear == 2017) {
+              d3.selectAll("g").selectAll("rect")
+              .append("text")
+              .attr("id", "value")
+              .attr("x", (d, i) => xScale(d.borough)+85)
+              .attr("y", function(d) {return yScale(d.count2017) + 10;})
+              .text(function(d) {return d.count2017;});
+              console.log(d.count2017, xScale(d.borough)+85, yScale(d.count2017) + 10)
+            }
+          if (currYear == 2016) {
+              d3.selectAll("g").selectAll("rect")
+              .append("text")
+              .attr("id", "value")
+              .attr("x", (d, i) => xScale(d.borough)+85)
+              .attr("y", function(d) {return yScale(d.count2016) + 10;})
+              .text(function(d) {return d.count2016;});
+              console.log(d.count2016, xScale(d.borough)+85, yScale(d.count2016) + 10)
+            }
+        if (currYear == 2015) {
+              d3.selectAll("g").selectAll("rect")
+              .append("text")
+              .attr("id", "value")
+              .attr("x", (d, i) => xScale(d.borough)+85)
+              .attr("y", function(d) {return yScale(d.count2015) + 10;})
+              .text(function(d) {return d.count2015;});
+              console.log(d.count2015, xScale(d.borough)+85, yScale(d.count2015) + 10)
+          }
+        if (currYear == 2014) {
+              d3.selectAll("g").selectAll("rect")
+              .append("text")
+              .attr("id", "value")
+              .attr("x", (d, i) => xScale(d.borough)+85)
+              .attr("y", function(d) {return yScale(d.count2014) + 10;})
+              .text(function(d) {return d.count2014;});
+              console.log(d.count2014, xScale(d.borough)+85, yScale(d.count2014) + 10)
+          }
+        if (currYear == 2013) {
+              d3.selectAll("g").selectAll("rect")
+              .append("text")
+              .attr("id", "value")
+              .attr("x", (d, i) => xScale(d.borough)+85)
+              .attr("y", function(d) {return yScale(d.count2013) + 10;})
+              .text(function(d) {return d.count2013;});
+              console.log(d.count2013, xScale(d.borough)+85, yScale(d.count2013) + 10)
+          }
+        if (currYear == 2012) {
+          d3.selectAll("g").selectAll("rect")
+          .append("text")
+          .attr("id", "value")
+          .attr("x", (d, i) => xScale(d.borough)+85)
+          .attr("y", function(d) {return yScale(d.count2012) + 10;})
+          .text(function(d) {return d.count2012;});
+          console.log(d.count2012, xScale(d.borough)+85, yScale(d.count2012) + 10)
+          }
+        }
+        function mouseOut(d, i) {
+              d3.selectAll("#value").remove();
+          }
 
       </script>
 
@@ -167,8 +185,9 @@
               .duration(2000)
               .attr("y", d => yScale(d.count2018))
               .attr("height", d => innerHeight - yScale(d.count2018))
-              d3.select("#selected-dropdown").text(currYear);
+              d3.select("#selected-dropdown").text("Quick Observation: The data contains information till 03/09/2018, and we can observe that the number of accidents in the three months is almost same across four of the boroughs, namely: Manhattan, Brooklyn, Queens and Bronx.");
           }
+
 
           if (currYear == "2017")
           {
@@ -177,7 +196,7 @@
               .duration(2000)
               .attr("y", d => yScale(d.count2017))
               .attr("height", d => innerHeight - yScale(d.count2017))
-              d3.select("#selected-dropdown").text(currYear);
+              d3.select("#selected-dropdown").text("Quick Observation: The number of accidents in 2017 have dropped as compared to 2016.");
           }
 
           if (currYear == "2016")
@@ -187,7 +206,7 @@
               .duration(2000)
               .attr("y", d => yScale(d.count2016))
               .attr("height", d => innerHeight - yScale(d.count2016))
-              d3.select("#selected-dropdown").text(currYear);
+              d3.select("#selected-dropdown").text("Quick Observation: The number of accidents have dropped in 2016 as compared to 2015.");
           }
 
           if (currYear == "2015")
@@ -197,7 +216,7 @@
               .duration(2000)
               .attr("y", d => yScale(d.count2015))
               .attr("height", d => innerHeight - yScale(d.count2015))
-              d3.select("#selected-dropdown").text(currYear);
+              d3.select("#selected-dropdown").text("Quick Observation: 2015 observed the maximum number of accidents in almost all of the boroughs, expecially Brooklyn.");
           }
 
           if (currYear == "2014")
@@ -207,7 +226,7 @@
               .duration(2000)
               .attr("y", d => yScale(d.count2014))
               .attr("height", d => innerHeight - yScale(d.count2014))
-              d3.select("#selected-dropdown").text(currYear);
+              d3.select("#selected-dropdown").text("Quick Observation: There was a small increase in the number of accidents in 2014 as compared to 2013.");
           }
 
           if (currYear == "2013")
@@ -217,7 +236,7 @@
               .duration(2000)
               .attr("y", d => yScale(d.count2013))
               .attr("height", d => innerHeight - yScale(d.count2013))
-              d3.select("#selected-dropdown").text(currYear);
+              d3.select("#selected-dropdown").text("Quick Observation: Brooklyn experiences that maximum number of accidents among all boroughs, and Manhattan and Queens have almost the same number of accidents.");
           }
 
           if (currYear == "2012")
@@ -227,11 +246,24 @@
               .duration(2000)
               .attr("y", d => yScale(d.count2012))
               .attr("height", d => innerHeight - yScale(d.count2012))
-              d3.select("#selected-dropdown").text(currYear);
+              d3.select("#selected-dropdown").text("Quick Observation: The year 2012 covers information from the month of July till the month of December.");
           }
       })
 
       </script>
+      <br>
+      <br>
+      <br>
+      <h3 style="color: white"> Some key observations from the data: </h3>
+      <ul style="color: white">
+        <li> Bronx has observed almost the same number of accidents every year while the others have fluctuated quite a lot. </li> <br>
+        <li> 2015 was the year where the maximum number of accidents took place in most boroughs.</li> <br>
+        <li> Brooklyn sees the maximum number of accidents each year. </li> <br>
+      </ul>
+      <br>
+      <br>
+      <br>
+      <p align="center" style="color: white"> Created by Aakanksha Joshi, Adarsh Chavakula, Harsheel Soin and Deepak Maran for the course STATGR5702: Exploratory Data Analysis and Visualization at Columbia University in the City of New York </p>
 
   </body>
 </html>
