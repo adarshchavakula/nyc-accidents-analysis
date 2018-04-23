@@ -1,0 +1,4311 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+      body {
+      background-color: #900039;
+      font-size: 14px;
+      font-family: 'Raleway', sans-serif;
+    }
+    
+    p {
+      color: white;
+      margin: 50px;
+    }
+    
+    a {
+      color: #4FDEF2;
+    }
+    
+    .axis {
+      fill: gray;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+    
+    .axis .halo {
+      stroke: gray;
+      stroke-width: 4px;
+      stroke-linecap: round;
+    }
+    
+    .handle path {
+      stroke: white;
+      stroke-width: 3px;
+      stroke-linecap: round;
+      pointer-events: none;
+    }
+    
+    .handle text {
+      fill: white;
+      text-align: center;
+      font
+  </style>
+</head>
+
+<body>
+
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+
+  <script>
+      
+    dataset =  [
+ {
+ "MONTH_YEAR": [ "2012-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 428 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 1769 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 240 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 613 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 891 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 15 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 337 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 380 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 188 ],
+"NUMBER_OF_DEATHS": [ 9 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 360 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 414 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 1719 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 219 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 657 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 890 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 10 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 344 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 430 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 182 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 376 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 393 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 1724 ],
+"NUMBER_OF_DEATHS": [ 6 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 229 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 630 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 887 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 11 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 369 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 352 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 187 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 324 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 331 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 1702 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 225 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 677 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 849 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 16 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 371 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 452 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 159 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 378 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 400 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 1697 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 145 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 650 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 686 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 7 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 389 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 398 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 174 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 366 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 345 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 1797 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 194 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 701 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 807 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 13 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 358 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 461 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 200 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2012-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 367 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 374 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 1636 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 172 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 651 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 810 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 10 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 320 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 372 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 183 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 355 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 319 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 1530 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 151 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 570 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 645 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 9 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 267 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 279 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 176 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 286 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 339 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 1691 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 167 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 591 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 805 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 7 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 297 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 431 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 183 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 360 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 399 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 1807 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 188 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 611 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 849 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 16 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 304 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 426 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 179 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 378 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 433 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2128 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 202 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 790 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 958 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 13 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 379 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 398 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 247 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 446 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 463 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2101 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 217 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 655 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 979 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 11 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 383 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 458 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 204 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 461 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 445 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 1936 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 255 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 702 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 849 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 16 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 376 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 362 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 205 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 431 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 400 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 1871 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 198 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 660 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 849 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 10 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 347 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 455 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 205 ],
+"NUMBER_OF_DEATHS": [ 10 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 379 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 414 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 1917 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 193 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 658 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 887 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 8 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 362 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 501 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 233 ],
+"NUMBER_OF_DEATHS": [ 5 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 396 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 442 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2008 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 194 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 681 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 912 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 15 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 360 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 507 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 185 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 431 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 429 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2006 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 234 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 725 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 939 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 13 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 360 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 490 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 192 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 451 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 418 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 1685 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 213 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 734 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 804 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 17 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 386 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 422 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 226 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2013-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 375 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 377 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 1581 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 189 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 659 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 754 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 12 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 326 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 474 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 237 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 310 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 402 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 1504 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 170 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 524 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 703 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 6 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 303 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 416 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 164 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 298 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 386 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 1682 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 172 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 657 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 864 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 8 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 379 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 380 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 183 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 377 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 413 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 1870 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 212 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 687 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 945 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 13 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 389 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 397 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 191 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 447 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 615 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2096 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 235 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 777 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1124 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 7 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 428 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 526 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 228 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 486 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 541 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2130 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 264 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 746 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1105 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 16 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 441 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 557 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 224 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 473 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 534 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2093 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 251 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 707 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1007 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 10 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 392 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 430 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 218 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 433 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 596 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2270 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 227 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 769 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1108 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 13 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 421 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 594 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 237 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 438 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 598 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2448 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 225 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 809 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1118 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 13 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 471 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 753 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 238 ],
+"NUMBER_OF_DEATHS": [ 5 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 526 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 568 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2563 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 242 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 872 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1169 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 12 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 496 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 723 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 243 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 520 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 499 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2282 ],
+"NUMBER_OF_DEATHS": [ 5 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 204 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 823 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1116 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 9 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 487 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 834 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 246 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 487 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 547 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2269 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 208 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 915 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1105 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 14 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 463 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 921 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 222 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2014-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 583 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 452 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 1964 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 202 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 752 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 947 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 8 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 392 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 720 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 270 ],
+"NUMBER_OF_DEATHS": [ 5 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 402 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 552 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2023 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 199 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 787 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 973 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 5 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 426 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 721 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 228 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 416 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 559 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2413 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 230 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 841 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1201 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 13 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 520 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 811 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 240 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 516 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 559 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2462 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 261 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 765 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1210 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 14 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 488 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 866 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 233 ],
+"NUMBER_OF_DEATHS": [ 6 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 544 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 637 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2907 ],
+"NUMBER_OF_DEATHS": [ 5 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 229 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 919 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1380 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 12 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 517 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 945 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 268 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 572 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 654 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2787 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 244 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 946 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1380 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 11 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 546 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 899 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 262 ],
+"NUMBER_OF_DEATHS": [ 5 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 609 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 665 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2882 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 240 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 885 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1401 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 13 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 568 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 943 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 275 ],
+"NUMBER_OF_DEATHS": [ 5 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 551 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 678 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2878 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 232 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 852 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1464 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 15 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 518 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 1024 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 284 ],
+"NUMBER_OF_DEATHS": [ 6 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 576 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 599 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2967 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 201 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 889 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1327 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 15 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 563 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 983 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 254 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 544 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 599 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 3163 ],
+"NUMBER_OF_DEATHS": [ 5 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 236 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 954 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1487 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 16 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 593 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 964 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 266 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 627 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 578 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2700 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 233 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 932 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1362 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 13 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 580 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 752 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 274 ],
+"NUMBER_OF_DEATHS": [ 5 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 547 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 595 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2865 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 245 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 1027 ],
+"NUMBER_OF_DEATHS": [ 5 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1348 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 14 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 579 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 896 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 286 ],
+"NUMBER_OF_DEATHS": [ 7 ] 
+},
+{
+ "MONTH_YEAR": [ "2015-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 644 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 644 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2747 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 212 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 898 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1194 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 35 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 503 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 739 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 279 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 536 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 542 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 2562 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 180 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 893 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1169 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 20 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 495 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 685 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 251 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 520 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 706 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 3452 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 291 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 1097 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1502 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 28 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 699 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 476 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 256 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 620 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 645 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 3432 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 256 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 1059 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1366 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 17 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 692 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 326 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 244 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 495 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 3 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 16 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 2 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 4 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 1 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 1 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 2 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 28 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 1 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 5 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 12 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 5 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 4 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 3 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 8 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 33 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 3 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 12 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 14 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 6 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 1 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 6 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 36 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 204 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 22 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 53 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 1 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 76 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 30 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 12 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 30 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 660 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 3487 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 258 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 944 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 17 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 1360 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 11 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 401 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 265 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 394 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 887 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 4770 ],
+"NUMBER_OF_DEATHS": [ 5 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 363 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 1309 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 22 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 1765 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 20 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 650 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 314 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 491 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 824 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 4725 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 309 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 1323 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 21 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 1778 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 16 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 592 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 348 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 482 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 929 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 4604 ],
+"NUMBER_OF_DEATHS": [ 6 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 361 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 1340 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 24 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 1789 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 16 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 551 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 336 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2016-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 476 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 776 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 3911 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 325 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 1315 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 16 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 1602 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 6 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 406 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 300 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 445 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 751 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 3682 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 290 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 1090 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 19 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 1465 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 19 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 376 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 317 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 403 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 948 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 4467 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 326 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 1335 ],
+"NUMBER_OF_DEATHS": [ 5 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 21 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 1802 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 22 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 492 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 336 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 502 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 906 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 4354 ],
+"NUMBER_OF_DEATHS": [ 6 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 355 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 1184 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 24 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 1796 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 18 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 451 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 346 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-04" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 479 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 973 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 5021 ],
+"NUMBER_OF_DEATHS": [ 5 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 359 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 1451 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 33 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 2181 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 23 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 535 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 452 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-05" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 589 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 1091 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 4907 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 437 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 1417 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 38 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 2265 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 24 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 652 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 429 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-06" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 625 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 1000 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 4720 ],
+"NUMBER_OF_DEATHS": [ 6 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 398 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 1350 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 22 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 2011 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 22 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 523 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 394 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-07" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 553 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 1010 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 4603 ],
+"NUMBER_OF_DEATHS": [ 5 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 353 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 1233 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 13 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 1979 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 12 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 548 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 366 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-08" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 492 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 939 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 4735 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 370 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 1317 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 23 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 2046 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 22 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 554 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 406 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-09" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 557 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 915 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 4847 ],
+"NUMBER_OF_DEATHS": [ 5 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 383 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 1437 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 31 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 2122 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 8 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 571 ],
+"NUMBER_OF_DEATHS": [ 9 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 363 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-10" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 497 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 928 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 4593 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 346 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 1411 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 18 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 1971 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 19 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 502 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 345 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-11" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 512 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 845 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 4345 ],
+"NUMBER_OF_DEATHS": [ 4 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 310 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 1522 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 14 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 1879 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 11 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 555 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 372 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2017-12" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 482 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 844 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 3697 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 219 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 1302 ],
+"NUMBER_OF_DEATHS": [ 5 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 20 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 1678 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 13 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 459 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 278 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-01" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 428 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 713 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 3489 ],
+"NUMBER_OF_DEATHS": [ 2 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 211 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 1152 ],
+"NUMBER_OF_DEATHS": [ 3 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 12 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 1483 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 10 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 416 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 261 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-02" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 391 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Backing Unsafely" ],
+"NUMBER_OF_ACCIDENTS": [ 218 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inattention/Distraction" ],
+"NUMBER_OF_ACCIDENTS": [ 1122 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Driver Inexperience" ],
+"NUMBER_OF_ACCIDENTS": [ 77 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Failure to Yield Right-of-Way" ],
+"NUMBER_OF_ACCIDENTS": [ 360 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Fatigued/Drowsy" ],
+"NUMBER_OF_ACCIDENTS": [ 7 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Following Too Closely" ],
+"NUMBER_OF_ACCIDENTS": [ 504 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Lost Consciousness" ],
+"NUMBER_OF_ACCIDENTS": [ 6 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Other Vehicular" ],
+"NUMBER_OF_ACCIDENTS": [ 136 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Traffic Control Disregarded" ],
+"NUMBER_OF_ACCIDENTS": [ 91 ],
+"NUMBER_OF_DEATHS": [ 1 ] 
+},
+{
+ "MONTH_YEAR": [ "2018-03" ],
+"CONTRIBUTING FACTOR VEHICLE 1": [ "Turning Improperly" ],
+"NUMBER_OF_ACCIDENTS": [ 133 ],
+"NUMBER_OF_DEATHS": [ 0 ] 
+} 
+]
+
+        
+        
+        
+    // parameters
+    var margin = {
+        top: 50,
+        right: 50,
+        bottom: 50,
+        left: 50
+      },
+      width = 900 - margin.left - margin.right,
+      height = 150 - margin.bottom - margin.top;
+
+
+    // scale function
+    var timeScale = d3.scaleTime()
+      .domain([new Date('2013-02'), new Date('2018-01')])
+      .range([0, width])
+      .clamp(true);
+
+    var formatDate = d3.timeFormat("%b, 20%y");
+    var format2 = d3.timeFormat("20%y-%m")
+      
+      
+      var w = 900;
+      var h = 400;
+      var margin2 = {top: 25, right: 0, bottom: 25,
+          left: 150};
+      var innerWidth = w - margin2.left - margin2.right;
+      var innerHeight = h - margin2.top - margin2.bottom;
+      var dur = 1500;                                 // NEW
+
+      
+    // scales 
+      var bardata = dataset.filter(function(element){ return element.MONTH_YEAR == '2013-02'; });
+
+      var map1 = d3.map(bardata, function(d) { return d.NUMBER_OF_DEATHS; });
+      var map2 = d3.map(bardata, function(d) { return d.NUMBER_OF_ACCIDENTS; });
+      var key = d3.map(bardata, function(d) { return d["CONTRIBUTING FACTOR VEHICLE 1"]; });
+
+      var yScale = d3.scaleBand()
+          .domain(key.keys())
+          .range([innerHeight, 0])
+          .paddingInner(.1);
+
+      var xScale = d3.scaleLinear()
+          .domain([0, Math.max(d3.max(map1.keys().map(Number)),d3.max(map2.keys().map(Number)))])
+          .range([0, innerWidth])
+
+      var xAxis = d3.axisBottom()                     // NEW
+          .scale(xScale);
+
+      var yAxis = d3.axisLeft()
+          .scale(yScale);
+      
+
+      var svg1 = d3.select("body")
+        .append("svg")
+        .attr("width", w)
+        .attr("height", h);
+      
+      
+      var bars = svg1.append("g")
+          .attr("id", "plot")                         // NEW
+          .attr("transform", `translate (${margin2.left}, ${margin2.top})`)
+          .selectAll("rect")
+          .data(bardata);
+
+      bars.enter().append("rect")
+          .attr("x", d => xScale(0))
+          .attr("y", (d, i) => yScale(d["CONTRIBUTING FACTOR VEHICLE 1"]))
+          .attr("width", d => xScale(d["NUMBER_OF_ACCIDENTS"]))
+          .attr("height", d => yScale.bandwidth())
+          .attr("fill", "blue");
+
+      svg1.append("g")
+          .attr("class", "xAxis")
+          .attr("transform", `translate (${margin2.left}, ${h - margin2.bottom})`)
+          .call(xAxis);
+
+      svg1.append("g")
+          .attr("class", "yAxis")
+          .attr("transform", `translate (${margin2.left}, ${margin2.top})`)
+          .call(yAxis);
+
+      
+
+    var svg = d3.select("body").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      // classic transform to position g
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      
+
+    svg.append("rect")
+      .style("pointer-events", "all")
+      .style("fill", "none")
+      .attr("width", width)
+      .attr("height", height)
+      .style("cursor", "crosshair")
+      .on("mousedown", function(){
+        updatePos(this);
+      })
+      .on("mousemove", function(){
+        if (d3.event.which === 1){
+          updatePos(this);
+        }
+      });
+
+    function updatePos(elem){
+      var xPos = d3.mouse(elem)[0];
+      handle.attr('transform', 'translate(' + xPos + ",0)");
+      var v = timeScale.invert(xPos);
+      text.text(formatDate(v));
+
+      var bardata = dataset.filter(function(element){ return element.MONTH_YEAR == format2(v); });
+        
+      var bars = svg1.append("g")
+          .attr("id", "plot")                         // NEW
+          .attr("transform", `translate (${margin2.left}, ${margin2.top})`)
+          .selectAll("rect")
+          .data(bardata);
+
+      bars.enter().append("rect")
+          .attr("x", d => xScale(0))
+          .attr("y", (d, i) => yScale(d["CONTRIBUTING FACTOR VEHICLE 1"]))
+          .attr("width", d => xScale(d["NUMBER_OF_ACCIDENTS"]))
+          .attr("height", d => yScale.bandwidth())
+          .attr("fill", "blue");
+        
+        
+    }
+
+    svg.append("g")
+      .attr("class", "x axis")
+      // put in middle of screen
+      .attr("transform", "translate(0," + height / 2 + ")")
+      // inroduce axis
+      .call(d3.axisBottom()
+        .scale(timeScale)
+        .tickFormat(function(d) {
+          return formatDate(d);
+        })
+        .tickSize(0)
+        .tickPadding(12)
+        .tickValues([timeScale.domain()[0], timeScale.domain()[1]]))
+      .select(".domain")
+      .select(function() {
+        console.log(this);
+        return this.parentNode.appendChild(this.cloneNode(true));
+      })
+      .attr("class", "halo");
+
+    var handle = svg.append("g")
+      .attr("class", "handle")
+      
+    handle.append("path")
+      .attr("transform", "translate(0," + height / 2 + ")")
+      .attr("d", "M 0 -20 V 20")
+
+    var text = handle.append('text')
+      .text(formatDate(timeScale.domain()[0]))
+      .attr("transform", "translate(" + (-18) + " ," + (height / 2 - 25) + ")");
+
+  </script>
+</body>
+
+</html>
