@@ -4208,7 +4208,7 @@
           .selectAll("rect")
           .data(bardata);
 
-      bars.enter().append("rect")
+      var rects = bars.enter().append("rect")
           .attr("x", d => xScale(0))
           .attr("y", (d, i) => yScale(d["CONTRIBUTING FACTOR VEHICLE 1"]))
           .attr("width", d => xScale(d["NUMBER_OF_ACCIDENTS"]))
@@ -4256,18 +4256,22 @@
       var v = timeScale.invert(xPos);
       text.text(formatDate(v));
 
-      var bardata = dataset.filter(function(element){ return element.MONTH_YEAR == format2(v); });
+      bardata1 = dataset.filter(function(element){ console.log(element.MONTH_YEAR == format2(v)); return element.MONTH_YEAR == format2(v); });
+      console.log(bardata1[2]["CONTRIBUTING FACTOR VEHICLE 1"])
+        console.log(bardata1[2]["NUMBER_OF_ACCIDENTS"])
+        console.log(format2(v) == '2013-07')
         
-      var bars = svg1.append("g")
-          .attr("id", "plot")                         // NEW
-          .attr("transform", `translate (${margin2.left}, ${margin2.top})`)
-          .selectAll("rect")
-          .data(bardata);
+//      var bars = svg1.append("g")
+//          .attr("id", "plot")                         // NEW
+//          .attr("transform", `translate (${margin2.left}, ${margin2.top})`)
+//          .selectAll("rect")
+//          .data(bardata);
+        
+      
 
-      bars.enter().append("rect")
-          .attr("x", d => xScale(0))
-          .attr("y", (d, i) => yScale(d["CONTRIBUTING FACTOR VEHICLE 1"]))
-          .attr("width", d => xScale(d["NUMBER_OF_ACCIDENTS"]))
+      rects.attr("x", d => xScale(0))
+          .attr("y", (d, i) => yScale(bardata1[i]["CONTRIBUTING FACTOR VEHICLE 1"]))
+          .attr("width", (d, i) => xScale(bardata1[i]["NUMBER_OF_ACCIDENTS"]))
           .attr("height", d => yScale.bandwidth())
           .attr("fill", "blue");
         
