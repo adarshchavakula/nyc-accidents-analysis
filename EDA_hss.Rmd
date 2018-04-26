@@ -246,7 +246,7 @@ qmap('new york city', zoom = 12,color = 'bw', legend = 'topleft') + geom_point(a
 #NYMap <- ggmap(nyc, base_layer = ggplot(aes(x = LONGITUDE, y = LATITUDE),
 #data = accidents_topCF12)) + geom_point(aes(x=LONGITUDE, y=LATITUDE, color=`NUMBER OF PERSONS KILLED`), data=accidents_topCF12,alpha=0.1, size=0.7)+ scale_colour_gradient(low = "red", high = "blue")+facet_wrap(~ `CONTRIBUTING FACTOR VEHICLE 1`, nrow=3)+theme(panel.spacing.x=unit(2, "lines"),panel.spacing.y=unit(2, "lines"))
 
-qmap('manhattan', zoom = 13,color = 'bw', legend = 'topleft') + geom_point(aes(x=LONGITUDE, y=LATITUDE, color=`NUMBER OF PERSONS KILLED`), data=accidents_topCF12,alpha=0.7, size=1.0) + viridis::scale_color_viridis()+ggtitle("Spatial View of Accidents by Top 5 Contributing Factors in Manhattan")+theme(plot.title = element_text(hjust = 0.5, size=22))+geom_density_2d(aes(x=LONGITUDE, y=LATITUDE, color=`NUMBER OF PERSONS KILLED`), data=accidents_topCF12, color="red")+facet_wrap(~ `CONTRIBUTING FACTOR VEHICLE 1`, nrow=3)+theme(panel.spacing.x=unit(2, "lines"),panel.spacing.y=unit(2, "lines"))
+qmap('manhattan', zoom = 13,color = 'bw', legend = 'topleft') + geom_point(aes(x=LONGITUDE, y=LATITUDE, color=`NUMBER OF PERSONS KILLED`), data=accidents_topCF12,alpha=0.7, size=1.0) + viridis::scale_color_viridis()+ggtitle("Spatial View of Accidents by Top 5 Contributing Factors in Manhattan")+theme(plot.title = element_text(hjust = 0.5, size=28))+geom_density_2d(aes(x=LONGITUDE, y=LATITUDE, color=`NUMBER OF PERSONS KILLED`), data=accidents_topCF12, color="red")+facet_wrap(~ `CONTRIBUTING FACTOR VEHICLE 1`, nrow=3)+theme(panel.spacing.x=unit(2, "lines"),panel.spacing.y=unit(2, "lines"))+theme(strip.text.x = element_text(size = 25))
 
 ```
 
@@ -266,7 +266,7 @@ head(accidents_cf_vt,n=10)
 ```
 
 ```{r, fig.height=5, fig.width=10, warning=FALSE}
-ggplot(accidents_cf_vt, aes(y = `VEHICLE TYPE CODE 1`, x = `CONTRIBUTING FACTOR VEHICLE 1`, fill = NUMBER_OF_ACCIDENTS)) + theme(axis.text.x = element_text(angle = 90, hjust = 1))+geom_tile()+xlab("Contributing Factor Vehicle 1")+ylab("Vehicle Type 1")+ggtitle("Number of Accidents by combinations of First Vehicle Types and corresponding Contributing Factors")+theme(plot.title = element_text(hjust = 0.5))+viridis::scale_fill_viridis()
+ggplot(accidents_cf_vt, aes(y = `VEHICLE TYPE CODE 1`, x = `CONTRIBUTING FACTOR VEHICLE 1`, fill = NUMBER_OF_ACCIDENTS)) + theme(axis.text.x = element_text(angle = 60, hjust = 1))+geom_tile()+xlab("Contributing Factor Vehicle 1")+ylab("Vehicle Type 1")+ggtitle("Number of Accidents by combinations of First Vehicle Types and corresponding Contributing Factors")+theme(plot.title = element_text(hjust = 0.5))+viridis::scale_fill_viridis()
 ```
 
 
@@ -281,7 +281,7 @@ head(accidents_cf_vt2,n=10)
 ```
 
 ```{r, fig.height=5, fig.width=10, warning=FALSE}
-ggplot(accidents_cf_vt2, aes(y = `VEHICLE TYPE CODE 2`, x = `CONTRIBUTING FACTOR VEHICLE 2`, fill = NUMBER_OF_ACCIDENTS)) + theme(axis.text.x = element_text(angle = 90, hjust = 1))+geom_tile()+xlab("Contributing Factor Vehicle 2")+ylab("Vehicle Type 2")+ggtitle("Number of Accidents by combinations of Second Vehicle Types and corresponding Contributing Factors")+theme(plot.title = element_text(hjust = 0.5))+viridis::scale_fill_viridis()
+ggplot(accidents_cf_vt2, aes(y = `VEHICLE TYPE CODE 2`, x = `CONTRIBUTING FACTOR VEHICLE 2`, fill = NUMBER_OF_ACCIDENTS)) + theme(axis.text.x = element_text(angle = 60, hjust = 1))+geom_tile()+xlab("Contributing Factor Vehicle 2")+ylab("Vehicle Type 2")+ggtitle("Number of Accidents by combinations of Second Vehicle Types and corresponding Contributing Factors")+theme(plot.title = element_text(hjust = 0.5))+viridis::scale_fill_viridis()
 ```
 
 
@@ -305,7 +305,7 @@ zip_choropleth(accidents_zip,
                state_zoom = "new york",
                county_zoom = 36061,
                title      = "Accidents by Zip Code in Manhattan",
-               legend     = "Number of Accidents") +theme(plot.title = element_text(hjust = 0.5, size=15))+viridis::scale_fill_viridis(discrete = TRUE)+coord_map()
+               legend     = "Number of Accidents") +theme(plot.title = element_text(hjust = 0.5, size=15))+viridis::scale_fill_viridis(name="# Accidents",discrete = TRUE)+coord_map()
 ```
 
 ```{r, fig.height=5,fig.width=6,message=FALSE,warning=FALSE}
@@ -319,9 +319,22 @@ zip_choropleth(accidents_zip_other,
                state_zoom = "new york",
                county_zoom = c(36005,36047,36061,36081,36085),
                title      = "Accidents by Zip Code in New York City",
-               legend     = "Number of Accidents") +theme(plot.title = element_text(hjust = 0.5, size=15))+viridis::scale_fill_viridis(discrete = TRUE)+coord_map()
+               legend     = "Number of Accidents") +theme(plot.title = element_text(hjust = 0.5, size=15))+viridis::scale_fill_viridis(name="# Accidents",discrete = TRUE)+coord_map()
 ```
 
+```{r}
+accidents_zip_other <- accidents %>% filter(!is.na(`ZIP CODE`)) %>% group_by(`ZIP CODE`,BOROUGH) %>% summarise(NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`))
+
+names(accidents_zip_other) <- c("region", "BOROUGH","value") 
+accidents_zip_other$region <- factor(accidents_zip_other$region)
+accidents_zip_other <- accidents_zip_other[!duplicated(accidents_zip_other$region),]
+
+zip_choropleth(accidents_zip_other,
+               state_zoom = "new york",
+               county_zoom = c(36005,36047,36061,36081,36085),
+               title      = "Deaths by Zip Code in New York City",
+               legend     = "Number of Deaths") +theme(plot.title = element_text(hjust = 0.5, size=15))+viridis::scale_fill_viridis(name="# Deaths",discrete = TRUE)+coord_map()
+```
 
 
 --END--
