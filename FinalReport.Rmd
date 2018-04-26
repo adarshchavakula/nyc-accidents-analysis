@@ -141,9 +141,30 @@ ggplot(data=subset(accidents, !is.na(BOROUGH)), aes(BOROUGH)) + geom_bar(fill="l
 
 It appears that Brooklyn is the borough with the most number of accidents. This is not surprising as it is the most populated one. We can get a better understanding of this by looking at the ratio of annual accidents to the populations of these boroughs.
 
-<Accidents/10000 people chart>
+```{r}
 
-This chart reveals a different picture compared to the prior chart. It is apparent that Manhattan has a higher number of accidents per 1000 residents compared to Brooklyn - making it more dangerous.
+# Accidents per 100,000 in all Boroughs 
+
+borough_per_1000 <- accidents %>% 
+  group_by(`BOROUGH`) %>% 
+  summarise(count_accidents = n()) %>% 
+  filter(!is.na(`BOROUGH`)) %>%
+  select(`BOROUGH`, count_accidents) %>% 
+  arrange(desc(count_accidents))
+
+pops <- c(1643734, 2629150, 1455720, 2333054, 476015)
+boroughs <- c("MANHATTAN","BROOKLYN","BRONX","QUEENS","STATEN ISLAND")
+
+pop_table <- data_frame(POPS = pops, BOROUGH = boroughs)
+
+accidents_summary <- borough_per_1000 %>% left_join(pop_table, by="BOROUGH") %>% mutate(count_accidents = count_accidents/POPS *1000)
+
+ggplot(data=accidents_summary, aes(x=BOROUGH, y=count_accidents)) + geom_col(fill="lightblue", color="black") + xlab("Borough") + ylab('Accidents per 1000 residents') + ggtitle('Accidents per 1000 residents by Borough') + 
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+This chart reveals a different picture compared to the prior chart. It is apparent that Manhattan has a 25% higher number of accidents per 1000 residents compared to Brooklyn - making it more dangerous.
 
 
 ### ZIP codes
@@ -179,13 +200,62 @@ We can make a few quick observations from the chart:
 2. Brooklyn also has a large number of ZIP codes with high accident rates.
 2. Large parts of Queens, Bronx, Staten Island and Uptown Manhattan had relatively fewer accidents.
 
-We also wanted to see which ZIP codes had the highest fatalities. 
+Zooming in on Manhattan:
+```{r,message=FALSE, warning=FALSE, fig.width=8}
+accidents_zip <- accidents %>% filter(!is.na(`ZIP CODE`)) %>% filter(BOROUGH=="MANHATTAN") %>% group_by(`ZIP CODE`) %>% summarise(NUMBER_OF_ACCIDENTS=n()) 
+names(accidents_zip) <- c("region", "value")
+accidents_zip$region <- factor(accidents_zip$region)
 
-<fatalities chart>
+zip_choropleth(accidents_zip,
+               state_zoom = "new york",
+               county_zoom = 36061,
+               title      = "Accidents by Zip Code in Manhattan",
+               legend     = "Number of Accidents") +theme(plot.title = element_text(hjust = 0.5, size=15))+viridis::scale_fill_viridis(name="# Accidents",discrete = TRUE)+coord_map()
+```
+
 
 The ZIP codes which have the highest accidents and fatalities are the following:
 
-<zip code cleaveland charts>
+```{r}
+
+zip_count <- accidents %>% 
+  group_by(`ZIP CODE`) %>% 
+  summarise(count_accidents = n()) %>% 
+  filter(!is.na(`ZIP CODE`)) %>%
+  select(`ZIP CODE`, count_accidents) %>% 
+  arrange(desc(count_accidents)) %>%
+  mutate(`ZIP CODE` = as.character(`ZIP CODE`))
+
+zip_count_top10 <- zip_count[1:10,]
+
+dotchart(zip_count_top10$count_accidents, labels = zip_count_top10$`ZIP CODE`,
+         pch=19, xlab = "Accident Count", groups = -zip_count_top10$count_accidents, 
+         xlim=c(0,16000), ylab = "ZIP code",
+         main = "Accidents - Top 10 ZIP codes")
+
+
+```
+
+We also looked at the top 10 ZIP codes for fatalities:
+
+```{r}
+
+zip_count_deaths <- accidents %>% 
+  group_by(`ZIP CODE`) %>% 
+  summarise(count_deaths = sum(`NUMBER OF PERSONS KILLED`)) %>% 
+  filter(!is.na(`ZIP CODE`)) %>%
+  select(`ZIP CODE`, count_deaths) %>% 
+  arrange(desc(count_deaths)) %>%
+  mutate(`ZIP CODE` = as.character(`ZIP CODE`))
+
+zip_count_deaths_top10 <- zip_count_deaths[1:10,]
+
+dotchart(zip_count_deaths_top10$count_deaths, labels = zip_count_deaths_top10$`ZIP CODE`,
+         pch=19, xlab = "Deaths", xlim=c(0,30),  main = "Deaths - Top 10 ZIP codes", ylab = "ZIP code")
+
+
+```
+
 
 To get a more granular view of where most accidents happen, we superimposed a heatmap on top of the NYC map to identify specific roads and interesctions with most accidents. The NYC map was obtained using the handy `ggmap` library. 
 
@@ -370,7 +440,12 @@ We observe that most accidents occur when one or more drivers of the vehicles in
 We wanted to observe which locations in NYC were more likely to see the particular contributing factors we noted above. For this we focused only on Manhattan to get a closer view. We also looked only at the top 5 contributing factors.
 
 ```{r, fig.height=10, fig.width=10, warning=FALSE,message=FALSE}
-library(ggmap)
+
+accidents_by_reasons <- accidents %>% filter(!is.na(`CONTRIBUTING FACTOR VEHICLE 1`) & !is.na(`CONTRIBUTING FACTOR VEHICLE 2`)) %>% filter(`CONTRIBUTING FACTOR VEHICLE 1` != "Unspecified" & `CONTRIBUTING FACTOR VEHICLE 2` != "Unspecified") %>% group_by(`CONTRIBUTING FACTOR VEHICLE 1`,`CONTRIBUTING FACTOR VEHICLE 2`) %>%
+  summarise(NUMBER_OF_ACCIDENTS=n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`)) %>%
+  arrange(desc(NUMBER_OF_ACCIDENTS))
+
 accidents_by_reasons_map <- head(accidents_by_reasons, n=5)
 accidents_topCF12 <- accidents %>%
   filter(`CONTRIBUTING FACTOR VEHICLE 1` %in% accidents_by_reasons_map$`CONTRIBUTING FACTOR VEHICLE 1` & `CONTRIBUTING FACTOR VEHICLE 2` %in% accidents_by_reasons_map$`CONTRIBUTING FACTOR VEHICLE 2`) %>% filter(!is.na(LATITUDE) & !is.na(LONGITUDE)) %>% filter(BOROUGH=='MANHATTAN')
@@ -411,6 +486,25 @@ accidents_cf_vt <- accidents %>%
 head(accidents_cf_vt,n=10)
 ```
 
+
+```{r, fig.height=5, fig.width=10, warning=FALSE}
+ggplot(accidents_cf_vt, aes(y = `VEHICLE TYPE CODE 1`, x = `CONTRIBUTING FACTOR VEHICLE 1`, fill = NUMBER_OF_ACCIDENTS)) + theme(axis.text.x = element_text(angle = 60, hjust = 1))+geom_tile()+xlab("Contributing Factor Vehicle 1")+ylab("Vehicle Type 1")+ggtitle("Number of Accidents by combinations of First Vehicle Types and corresponding Contributing Factors")+theme(plot.title = element_text(hjust = 0.5))+viridis::scale_fill_viridis()
+```
+
+
+```{r}
+accidents_cf_vt2 <- accidents %>% 
+  filter(!is.na(`VEHICLE TYPE CODE 2`) & !is.na(`CONTRIBUTING FACTOR VEHICLE 2`)) %>%  
+  filter(`VEHICLE TYPE CODE 2` != "UNKNOWN" & `CONTRIBUTING FACTOR VEHICLE 2`!= "Unspecified") %>% filter(`VEHICLE TYPE CODE 2` %in% accidents_by_vehicles_new$`VEHICLE TYPE CODE 2`) %>% filter(`CONTRIBUTING FACTOR VEHICLE 2` %in% accidents_by_reasons_new$`CONTRIBUTING FACTOR VEHICLE 2`) %>% group_by(`VEHICLE TYPE CODE 2`, `CONTRIBUTING FACTOR VEHICLE 2`) %>%
+  summarise(NUMBER_OF_ACCIDENTS=n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`)) %>%
+  arrange(desc(NUMBER_OF_ACCIDENTS))
+head(accidents_cf_vt2,n=10)
+```
+
+```{r, fig.height=5, fig.width=10, warning=FALSE}
+ggplot(accidents_cf_vt2, aes(y = `VEHICLE TYPE CODE 2`, x = `CONTRIBUTING FACTOR VEHICLE 2`, fill = NUMBER_OF_ACCIDENTS)) + theme(axis.text.x = element_text(angle = 60, hjust = 1))+geom_tile()+xlab("Contributing Factor Vehicle 2")+ylab("Vehicle Type 2")+ggtitle("Number of Accidents by combinations of Second Vehicle Types and corresponding Contributing Factors")+theme(plot.title = element_text(hjust = 0.5))+viridis::scale_fill_viridis()
+```
 
 ## Misc: Around the Columbia Neighborhood
 
