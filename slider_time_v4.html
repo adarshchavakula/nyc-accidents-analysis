@@ -4,13 +4,13 @@
 <head>
   <style>
       body {
-      background-color: #900039;
+      background-color: "aliceblue";
       font-size: 14px;
       font-family: 'Raleway', sans-serif;
     }
     
     p {
-      color: white;
+      color: gray;
       margin: 50px;
     }
     
@@ -32,17 +32,19 @@
     }
     
     .handle path {
-      stroke: white;
+      stroke: gray;
       stroke-width: 3px;
       stroke-linecap: round;
       pointer-events: none;
     }
     
     .handle text {
-      fill: white;
+      fill: gray;
       text-align: center;
       font
   </style>
+  <title>"How do the main contributing factors for accidents vary over the years?"</title>
+    "How do the main contributing factors for accidents vary over the years?"
 </head>
 
 <body>
@@ -4152,6 +4154,8 @@
       },
       width = 900 - margin.left - margin.right,
       height = 150 - margin.bottom - margin.top;
+      
+      var dur = 2000;
 
 
     // scale function
@@ -4166,7 +4170,7 @@
       
       var w = 900;
       var h = 400;
-      var margin2 = {top: 25, right: 0, bottom: 25,
+      var margin2 = {top: 25, right: 25, bottom: 25,
           left: 150};
       var innerWidth = w - margin2.left - margin2.right;
       var innerHeight = h - margin2.top - margin2.bottom;
@@ -4186,6 +4190,7 @@
           .paddingInner(.1);
 
       var xScale = d3.scaleLinear()
+//          .domain([0,6000])
           .domain([0, Math.max(d3.max(map1.keys().map(Number)),d3.max(map2.keys().map(Number)))])
           .range([0, innerWidth])
 
@@ -4215,15 +4220,15 @@
           .attr("height", d => yScale.bandwidth())
           .attr("fill", "blue");
 
-      svg1.append("g")
+      x = svg1.append("g")
           .attr("class", "xAxis")
-          .attr("transform", `translate (${margin2.left}, ${h - margin2.bottom})`)
-          .call(xAxis);
+          .attr("transform", `translate (${margin2.left}, ${h - margin2.bottom})`);
+      x.call(xAxis);
 
-      svg1.append("g")
+      y = svg1.append("g")
           .attr("class", "yAxis")
-          .attr("transform", `translate (${margin2.left}, ${margin2.top})`)
-          .call(yAxis);
+          .attr("transform", `translate (${margin2.left}, ${margin2.top})`);      
+      y.call(yAxis);
 
       
 
@@ -4257,25 +4262,29 @@
       text.text(formatDate(v));
 
       bardata1 = dataset.filter(function(element){ console.log(element.MONTH_YEAR == format2(v)); return element.MONTH_YEAR == format2(v); });
-      console.log(bardata1[2]["CONTRIBUTING FACTOR VEHICLE 1"])
-        console.log(bardata1[2]["NUMBER_OF_ACCIDENTS"])
-        console.log(format2(v) == '2013-07')
+
+
+      var map1 = d3.map(bardata1, function(d) { return d.NUMBER_OF_DEATHS; });
+      var map2 = d3.map(bardata1, function(d) { return d.NUMBER_OF_ACCIDENTS; });
+      var key = d3.map(bardata1, function(d) { return d["CONTRIBUTING FACTOR VEHICLE 1"]; });        
         
-//      var bars = svg1.append("g")
-//          .attr("id", "plot")                         // NEW
-//          .attr("transform", `translate (${margin2.left}, ${margin2.top})`)
-//          .selectAll("rect")
-//          .data(bardata);
-        
-      
+      var xScale = d3.scaleLinear()
+          .domain([0, Math.max(d3.max(map1.keys().map(Number)),d3.max(map2.keys().map(Number)))])
+          .range([0, innerWidth])
+
+      var xAxis = d3.axisBottom()                     // NEW
+          .scale(xScale);
+      x
+          .transition().duration(dur)
+          .call(xAxis)
 
       rects.attr("x", d => xScale(0))
+          .transition().duration(dur)
           .attr("y", (d, i) => yScale(bardata1[i]["CONTRIBUTING FACTOR VEHICLE 1"]))
           .attr("width", (d, i) => xScale(bardata1[i]["NUMBER_OF_ACCIDENTS"]))
           .attr("height", d => yScale.bandwidth())
           .attr("fill", "blue");
-        
-        
+                
     }
 
     svg.append("g")
