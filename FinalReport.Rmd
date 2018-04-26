@@ -39,6 +39,8 @@ We downloaded the CSV file from the NYC Open Data webpage for this dataset. The 
 
 ```{r eda, message=FALSE, warning=FALSE, results='hide'}
 library(tidyverse)
+library(ggmap)
+library(choroplethrZip)
 accidents <- read_csv("NYPD_Motor_Vehicle_Collisions.csv")
 ```
 
@@ -153,7 +155,7 @@ We looked at a more granular level of aggregation with ZIP codes to identify nei
 library(choroplethrZip)
 ```
 
-```{r, message=FALSE, warning=FALSE, fig.width=6}
+```{r, message=FALSE, warning=FALSE, fig.width=8}
 accidents_zip_other <- accidents %>% filter(!is.na(`ZIP CODE`)) %>% 
   group_by(`ZIP CODE`,BOROUGH) %>% 
   summarise(NUMBER_OF_ACCIDENTS=n())
@@ -185,6 +187,18 @@ The ZIP codes which have the highest accidents and fatalities are the following:
 
 <zip code cleaveland charts>
 
+To get a more granular view of where most accidents happen, we superimposed a heatmap on top of the NYC map to identify specific roads and interesctions with most accidents. The NYC map was obtained using the handy `ggmap` library. 
+
+```{r, message=FALSE, warning=FALSE, fig.width=8}
+nycmap <- qmap("new york", zoom = 11, color = "bw")
+nycmap + stat_bin2d(aes(x = LONGITUDE, y = LATITUDE), size = .5, bins = 150, 
+                    alpha = 0.5, data = accidents) + scale_fill_continuous(low="blue", high="red") + 
+  ggtitle("Accident Density by Location") + theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+The heatmap is lit up brightly for midtown and lower Manhattan. There are also hotspots in Brooklyn (along Atlantic Avenue) which are brightly lit. This chart illustrates why the accidents/residents is the highest for Manhattan.
+
 ## Time: When do accidents happen?
 
 We tried to understand the trend in accidents over time. We started by looking at daily accidents over time (over the span of 5 years). This is obviously expected to be noisy, so we added a trend curve using the non-parametric `loess` smoothing.
@@ -214,6 +228,8 @@ There are a few quick observations we can make from this chart:
 2. The trend curve has a very gradual overall increase over time.
 3. The trend curve seems to be oscillating - indicating a periodicity in the data.
 
+##### Accidents by Month
+
 To better understand the periodicity aspect of the data, we looked at the number of accidents aggregated over a month level.
 
 
@@ -242,8 +258,7 @@ ggplot(accidents_by_month, aes(x=MONTH, y=num_accidents)) +
 
 ```
 
-### On Design Choices:
-The above chart is a polar coordinate representation of the bar chart we saw above. The Cartesian bar chart is significantly easier to read and make inferences from. The differneces in values are linear and intuitive. However it fails to capture the cyclical nature of months (Decmber looping over to January) which is better captured by the Polar bar chart.
+#### Accidents by time of day 
 
 After time of the year, we were interested in looking at trends by time of the day. We aggregated the data by the hour and looked at the accidents. Like before, we made both the cartesian bar charts as well as the polar bar charts.
 
@@ -261,7 +276,7 @@ accidents_by_timeofday <- accidents %>%
 ggplot(accidents_by_timeofday, aes(x=HOUR, weights=NUMBER_OF_ACCIDENTS)) +
   geom_bar(stat="count", fill="lightblue", color="black") +
   xlab("Time") + ylab("Accidents") +
-  ggtitle("Hourly Accidents") +
+  ggtitle("Accidents by Hour") +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
@@ -269,12 +284,132 @@ ggplot(accidents_by_timeofday, aes(x=HOUR, weights=NUMBER_OF_ACCIDENTS)) +
 ggplot(accidents_by_timeofday, aes(x=HOUR, weights=NUMBER_OF_ACCIDENTS)) +
   geom_bar( stat="count", fill="lightblue", color="black") +
   xlab("Time") + ylab("Accidents") +
-  ggtitle("Hourly Accidents") +
+  ggtitle("Accidents by Hour") +
   theme(plot.title = element_text(hjust = 0.5)) +
   coord_polar()
 ```
 
+#### On Design Choices...
+The above chart is a polar coordinate representation of the bar chart preceding it. The Cartesian bar chart is significantly easier to read and draw inferences from. The differneces in values are linear and intuitive in the Cartesian chart. However it fails to capture the cyclical nature of months (December looping over to January) and time of day (23 to 0) which is better captured by the Polar bar chart.
 
+
+## Contributing Factors for accidents
+
+We analyzed the different contributing factors leading to accidents over the years. This is captured by the `CONTRIBUTING FACTOR VEHICLE 1` and `CONTRIBUTING FACTOR VEHICLE 2` variables. They correspond to the reason for vehicle 1 and Vehicle 2 respectively. These variables have a large number of missing values:
+
+```{r}
+print("Number of missing values in `CONTRIBUTING FACTOR VEHICLE 1`")
+print(sum(is.na(accidents$`CONTRIBUTING FACTOR VEHICLE 1`)))
+
+print("Number of missing values in `CONTRIBUTING FACTOR VEHICLE 2`")
+print(sum(is.na(accidents$`CONTRIBUTING FACTOR VEHICLE 2`)))
+```
+
+`CONTRIBUTING FACTOR VEHICLE 1` has much fewer missing values than `CONTRIBUTING FACTOR VEHICLE 2`. Analyzing them separately for the purpose of better analyses
+
+```{r}
+checkContrFact1_2 <- accidents %>% filter(!is.na(`CONTRIBUTING FACTOR VEHICLE 1`) & !is.na(`CONTRIBUTING FACTOR VEHICLE 2`)) %>% filter(`CONTRIBUTING FACTOR VEHICLE 1` != "Unspecified" & `CONTRIBUTING FACTOR VEHICLE 2` != "Unspecified") %>% mutate(sameValue = `CONTRIBUTING FACTOR VEHICLE 1`==`CONTRIBUTING FACTOR VEHICLE 2`) 
+print("Number of records where `CONTRIBUTING FACTOR VEHICLE 1` equals `CONTRIBUTING FACTOR VEHICLE 2`:")
+print(sum(checkContrFact1_2$sameValue))
+```
+
+Upon analyzing `CONTRIBUTING FACTOR VEHICLE 1` and `CONTRIBUTING FACTOR VEHICLE 2` columns after omitting records containing NAs and also only considering records where both `CONTRIBUTING FACTOR VEHICLE 1` and `CONTRIBUTING FACTOR VEHICLE 2` are specified, we observe that *98407* records out of *160161* have the same entry for these two columns.
+
+We plot the top 10 contributing factors for Vehicle 1.
+
+```{r}
+accidents_by_reason_1 <- accidents %>% filter(!is.na(`CONTRIBUTING FACTOR VEHICLE 1`)) %>% filter(`CONTRIBUTING FACTOR VEHICLE 1` != "Unspecified") %>% group_by(`CONTRIBUTING FACTOR VEHICLE 1`) %>%
+  summarise(NUMBER_OF_ACCIDENTS=n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`)) %>%
+  arrange(desc(NUMBER_OF_ACCIDENTS))
+
+accidents_by_reason_1 <- head(accidents_by_reason_1, n = 10)
+
+ggplot(accidents_by_reason_1, aes(x=reorder(`CONTRIBUTING FACTOR VEHICLE 1`, `NUMBER_OF_ACCIDENTS`), 
+                                  y=`NUMBER_OF_ACCIDENTS`)) + 
+  geom_col(fill="lightblue", color="black") + 
+  xlab("Contributing Factor Vehicle 1") +
+  ylab("Number of Accidents")+
+  ggtitle("Top 10 First Contributing Factors by Accident Count")+
+  theme(plot.title = element_text(hjust = 0.5))+coord_flip()
+```
+
+```{r}
+accidents_by_reason_2 <- accidents %>% filter(!is.na(`CONTRIBUTING FACTOR VEHICLE 2`)) %>% filter(`CONTRIBUTING FACTOR VEHICLE 2` != "Unspecified") %>% group_by(`CONTRIBUTING FACTOR VEHICLE 2`) %>%
+  summarise(NUMBER_OF_ACCIDENTS=n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`)) %>%
+  arrange(desc(NUMBER_OF_ACCIDENTS))
+
+accidents_by_reason_2 <- head(accidents_by_reason_2, n = 10)
+
+ggplot(accidents_by_reason_2, aes(x=reorder(`CONTRIBUTING FACTOR VEHICLE 2`, `NUMBER_OF_ACCIDENTS`), 
+                                  y=`NUMBER_OF_ACCIDENTS`)) +
+  geom_col(fill="lightblue", color="black") + 
+  xlab("Contributing Factor Vehicle 2")+ylab("Number of Accidents")+
+  ggtitle("Top 10 Second Contributing Factors by Accident Count")+
+  theme(plot.title = element_text(hjust = 0.5))+coord_flip()
+```
+
+We used a heatmap to understand the combination of Contributing Factor for Vehicle 1 and Contributing factor for Vehicle 2 resulting in most accidents.
+
+```{r, fig.height=10, fig.width=10}
+accidents_by_vehicles <- accidents %>% filter(!is.na(`VEHICLE TYPE CODE 1`) & !is.na(`VEHICLE TYPE CODE 2`)) %>% filter(`VEHICLE TYPE CODE 1` != "UNKNOWN" & `VEHICLE TYPE CODE 2` != "UNKNOWN") %>% group_by(`VEHICLE TYPE CODE 1`,`VEHICLE TYPE CODE 2`) %>%
+  summarise(NUMBER_OF_ACCIDENTS=n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`)) %>%
+  arrange(desc(NUMBER_OF_ACCIDENTS))
+
+accidents_by_vehicles <- head(accidents_by_vehicles, n = 50)
+ggplot(accidents_by_vehicles, aes(x = `VEHICLE TYPE CODE 1`, y = `VEHICLE TYPE CODE 2`, fill = NUMBER_OF_ACCIDENTS)) + theme(axis.text.x = element_text(angle = 60, hjust = 1))+geom_tile()+xlab("First Vehicle Type")+ylab("Second Vehicle Type")+ggtitle("Number of Accidents by combinations of Vehicle Types")+theme(plot.title = element_text(hjust = 0.5))+viridis::scale_fill_viridis()
+```
+
+We observe that most accidents occur when one or more drivers of the vehicles involved were distracted/inattentive. 
+
+
+#### Contributing Factors and Locations
+
+We wanted to observe which locations in NYC were more likely to see the particular contributing factors we noted above. For this we focused only on Manhattan to get a closer view. We also looked only at the top 5 contributing factors.
+
+```{r, fig.height=10, fig.width=10, warning=FALSE,message=FALSE}
+library(ggmap)
+accidents_by_reasons_map <- head(accidents_by_reasons, n=5)
+accidents_topCF12 <- accidents %>%
+  filter(`CONTRIBUTING FACTOR VEHICLE 1` %in% accidents_by_reasons_map$`CONTRIBUTING FACTOR VEHICLE 1` & `CONTRIBUTING FACTOR VEHICLE 2` %in% accidents_by_reasons_map$`CONTRIBUTING FACTOR VEHICLE 2`) %>% filter(!is.na(LATITUDE) & !is.na(LONGITUDE)) %>% filter(BOROUGH=='MANHATTAN')
+
+qmap('manhattan', zoom = 12,color = 'bw', legend = 'topleft') + geom_point(aes(x=LONGITUDE, y=LATITUDE, color=`CONTRIBUTING FACTOR VEHICLE 1`), data=accidents_topCF12,alpha=0.6, size=1.5) + viridis::scale_color_viridis(discrete=TRUE)+ggtitle("Spatial View of Accidents by Top 5 Contributing Factors in Manhattan")+theme(plot.title = element_text(hjust = 0.5, size=15))
+ 
+```
+
+We observe an unusual pattern here - the different contributing factors have different "hotspots" across Manhattan. This is better illustrated by using 2D density plots faceted on contributing factor.
+
+```{r, fig.height=20, fig.width=20, warning=FALSE,message=FALSE}
+qmap('manhattan', zoom = 13,color = 'bw', legend = 'topleft') + geom_point(aes(x=LONGITUDE, y=LATITUDE, color=`NUMBER OF PERSONS KILLED`), data=accidents_topCF12,alpha=0.7, size=1.0) + viridis::scale_color_viridis()+ggtitle("Spatial View of Accidents by Top 5 Contributing Factors in Manhattan")+theme(plot.title = element_text(hjust = 0.5, size=28))+geom_density_2d(aes(x=LONGITUDE, y=LATITUDE, color=`NUMBER OF PERSONS KILLED`), data=accidents_topCF12, color="red")+facet_wrap(~ `CONTRIBUTING FACTOR VEHICLE 1`, nrow=3)+theme(panel.spacing.x=unit(2, "lines"),panel.spacing.y=unit(2, "lines"))+theme(strip.text.x = element_text(size = 25))
+
+```
+
+Quick Observations:
+
+1. Driver inattention seems to be spread out across the borough. There are multiple hotspots for it.
+2. The hotspot for "Failure to yield right of way" seems to be around the Empire State Building.
+3. The hotspot for "Fatigued/Drowsy driver" is around the Trump Tower on 3rd Avenue.
+4. There seem to be a lot of accidents related to "Lost Consciousness" around Times Square.
+5. The "Other Vehicular" is concentrated on the East side of town.
+
+## Vehicles Involved
+
+Finally we analyzed the vehicles usually involved in accidents and tried to look for patterns there:
+
+```{r}
+accidents_by_vehicles_new <- head(accidents_by_vehicles, n=10)
+accidents_by_reasons_new <- head(accidents_by_reasons, n=10)
+
+accidents_cf_vt <- accidents %>% 
+  filter(!is.na(`VEHICLE TYPE CODE 1`) & !is.na(`CONTRIBUTING FACTOR VEHICLE 1`)) %>%  
+  filter(`VEHICLE TYPE CODE 1` != "UNKNOWN" & `CONTRIBUTING FACTOR VEHICLE 1`!= "Unspecified") %>% filter(`VEHICLE TYPE CODE 1` %in% accidents_by_vehicles_new$`VEHICLE TYPE CODE 1`) %>% filter(`CONTRIBUTING FACTOR VEHICLE 1` %in% accidents_by_reasons_new$`CONTRIBUTING FACTOR VEHICLE 1`) %>% group_by(`VEHICLE TYPE CODE 1`, `CONTRIBUTING FACTOR VEHICLE 1`) %>%
+  summarise(NUMBER_OF_ACCIDENTS=n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`)) %>%
+  arrange(desc(NUMBER_OF_ACCIDENTS))
+head(accidents_cf_vt,n=10)
+```
 
 
 ## Misc: Around the Columbia Neighborhood
