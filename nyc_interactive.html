@@ -2,13 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>NYC Accident Data</title>
+    <title>NYPD Vehicle Collisions Data</title>
     <script src="https://d3js.org/d3.v4.min.js">  </script>
   </head>
   <body bgcolor="black">
 
     <h1 align="center" style="color: white"> New York Police Department Motor Vehicle Collisions </h1>
-    <h4 align="center" style="color: white"> A Borough-Wise Distribution of Accidents from 2012-2018 </h4>
+    <h4 align="center" style="color: white"> A Borough-Wise Distribution of Accidents from 2013-2018 </h4>
     <h2 style="color: white">Select Another Year</h2>
     <select id="year-dropdown">
       <option value="2018">2018</option>
@@ -17,9 +17,9 @@
       <option value="2015">2015</option>
       <option value="2014">2014</option>
       <option value="2013">2013</option>
-      <option value="2012">2012</option>
     </select>
-    <p style="color: white" id="selected-dropdown">Quick Observation: The data contains information till 03/09/2018, and we can observe that the number of accidents in the three months is almost same across four of the boroughs, namely: Manhattan, Brooklyn, Queens and Bronx.</p>
+    <h5 style="color: white"> Mouseover Bars for Exact Numbers </h5> <br>
+    <p style="color: white" id="selected-dropdown">Quick Fact: More New Yorkers are now killed in traffic than murdered by guns. A New Yorker is killed in a crash every 33 hours.</p>
 
     <script type="text/javascript">
 
@@ -30,11 +30,11 @@
       var innerHeight = h - margin.top - margin.bottom;
       var innerWidth = w - margin.left - margin.right;
 
-      var dataset = [{borough: "Manhattan", count2018: 5291, count2017: 31487, count2016: 36766, count2015: 42517, count2014: 41262, count2013: 41578, count2012: 20719},
-                     {borough: "Brooklyn", count2018: 7887, count2017: 44631, count2016: 47698, count2015: 50843, count2014: 47758, count2013: 47016, count2012: 23302},
-                     {borough: "Queens", count2018: 7098, count2017: 38377, count2016: 41556, count2015: 42484, count2014: 41019, count2013: 39310, count2012: 20719},
-                     {borough: "Bronx", count2018: 3926, count2017: 21187, count2016: 21704, count2015: 21251, count2014: 19687, count2013: 19768, count2012: 19139},
-                     {borough: "Staten Island", count2018: 1034, count2017: 6212, count2016: 6720, count2015: 6344, count2014: 6614, count2013: 8295, count2012: 4902}];
+      var dataset = [{borough: "Manhattan", count2018: 5291, count2017: 31487, count2016: 36766, count2015: 42517, count2014: 41262, count2013: 41578},
+                     {borough: "Brooklyn", count2018: 7887, count2017: 44631, count2016: 47698, count2015: 50843, count2014: 47758, count2013: 47016},
+                     {borough: "Queens", count2018: 7098, count2017: 38377, count2016: 41556, count2015: 42484, count2014: 41019, count2013: 39310},
+                     {borough: "Bronx", count2018: 3926, count2017: 21187, count2016: 21704, count2015: 21251, count2014: 19687, count2013: 19768},
+                     {borough: "Staten Island", count2018: 1034, count2017: 6212, count2016: 6720, count2015: 6344, count2014: 6614, count2013: 8295}];
 
        var max2018 = d3.max(dataset, function(d) {return d.count2018;})
        var max2017 = d3.max(dataset, function(d) {return d.count2017;})
@@ -42,8 +42,7 @@
        var max2015 = d3.max(dataset, function(d) {return d.count2015;})
        var max2014 = d3.max(dataset, function(d) {return d.count2014;})
        var max2013 = d3.max(dataset, function(d) {return d.count2013;})
-       var max2012 = d3.max(dataset, function(d) {return d.count2012;})
-       var all_max = [max2018, max2017, max2016, max2015, max2014, max2013, max2012]
+       var all_max = [max2018, max2017, max2016, max2015, max2014, max2013]
 
        fin_max = d3.max(all_max)
 
@@ -53,11 +52,12 @@
             .attr("height", h);
 
         svg.append("rect")
+            .attr("id", "mainrect")
             .attr("x", 0)
             .attr("y", 0)
             .attr("width", w)
             .attr("height", h)
-            .attr("fill", "lightgreen");
+            .attr("fill", "PaleGreen");
 
         var xScale = d3.scaleBand()
             .domain(dataset.map(function(d) {return d.borough;}))
@@ -86,8 +86,11 @@
             .attr("width", "50")
             .attr("height", d => innerHeight - yScale(d.count2018))
             .attr("fill", "black")
+            // .on("mouseover", function(d, i) {
+            //   alert(d.count2018);
+            // })
             .on('mouseover', mouseOver)
-            .on('mouseout', mouseOut)
+            .on('mouseout', mouseOut);
 
         svg.append("g")
             .attr("class", "xAxis")
@@ -103,69 +106,54 @@
 
         function mouseOver(d, i) {
           if (currYear == 2018) {
-              d3.selectAll("g").selectAll("rect")
+              d3.select("svg")
               .append("text")
               .attr("id", "value")
-              .attr("x", (d, i) => xScale(d.borough)+85)
-              .attr("y", function(d) {return yScale(d.count2018) + 10;})
-              .text(function(d) {return d.count2018;});
-              console.log(d.count2018, xScale(d.borough)+85, yScale(d.count2018) + 10)
+              .attr("x", xScale(d.borough)+135)
+              .attr("y", yScale(d.count2018)+40)
+              .text(d.count2018)
             }
           if (currYear == 2017) {
-              d3.selectAll("g").selectAll("rect")
+              d3.select("svg")
               .append("text")
               .attr("id", "value")
-              .attr("x", (d, i) => xScale(d.borough)+85)
-              .attr("y", function(d) {return yScale(d.count2017) + 10;})
-              .text(function(d) {return d.count2017;});
-              console.log(d.count2017, xScale(d.borough)+85, yScale(d.count2017) + 10)
+              .attr("x", xScale(d.borough)+135)
+              .attr("y", yScale(d.count2017)+40)
+              .text(d.count2017)
             }
           if (currYear == 2016) {
-              d3.selectAll("g").selectAll("rect")
+              d3.select("svg")
               .append("text")
               .attr("id", "value")
-              .attr("x", (d, i) => xScale(d.borough)+85)
-              .attr("y", function(d) {return yScale(d.count2016) + 10;})
-              .text(function(d) {return d.count2016;});
-              console.log(d.count2016, xScale(d.borough)+85, yScale(d.count2016) + 10)
+              .attr("x", xScale(d.borough)+135)
+              .attr("y", yScale(d.count2016)+40)
+              .text(d.count2016)
             }
         if (currYear == 2015) {
-              d3.selectAll("g").selectAll("rect")
+              d3.select("svg")
               .append("text")
               .attr("id", "value")
-              .attr("x", (d, i) => xScale(d.borough)+85)
-              .attr("y", function(d) {return yScale(d.count2015) + 10;})
-              .text(function(d) {return d.count2015;});
-              console.log(d.count2015, xScale(d.borough)+85, yScale(d.count2015) + 10)
+              .attr("x", xScale(d.borough)+135)
+              .attr("y", yScale(d.count2015)+40)
+              .text(d.count2015)
           }
         if (currYear == 2014) {
-              d3.selectAll("g").selectAll("rect")
+              d3.select("svg")
               .append("text")
               .attr("id", "value")
-              .attr("x", (d, i) => xScale(d.borough)+85)
-              .attr("y", function(d) {return yScale(d.count2014) + 10;})
-              .text(function(d) {return d.count2014;});
-              console.log(d.count2014, xScale(d.borough)+85, yScale(d.count2014) + 10)
+              .attr("x", xScale(d.borough)+135)
+              .attr("y", yScale(d.count2014)+40)
+              .text(d.count2014)
           }
         if (currYear == 2013) {
-              d3.selectAll("g").selectAll("rect")
+              d3.select("svg")
               .append("text")
               .attr("id", "value")
-              .attr("x", (d, i) => xScale(d.borough)+85)
-              .attr("y", function(d) {return yScale(d.count2013) + 10;})
-              .text(function(d) {return d.count2013;});
-              console.log(d.count2013, xScale(d.borough)+85, yScale(d.count2013) + 10)
+              .attr("x", xScale(d.borough)+135)
+              .attr("y", yScale(d.count2013)+40)
+              .text(d.count2013)
           }
-        if (currYear == 2012) {
-          d3.selectAll("g").selectAll("rect")
-          .append("text")
-          .attr("id", "value")
-          .attr("x", (d, i) => xScale(d.borough)+85)
-          .attr("y", function(d) {return yScale(d.count2012) + 10;})
-          .text(function(d) {return d.count2012;});
-          console.log(d.count2012, xScale(d.borough)+85, yScale(d.count2012) + 10)
-          }
-        }
+      }
         function mouseOut(d, i) {
               d3.selectAll("#value").remove();
           }
@@ -185,7 +173,7 @@
               .duration(2000)
               .attr("y", d => yScale(d.count2018))
               .attr("height", d => innerHeight - yScale(d.count2018))
-              d3.select("#selected-dropdown").text("Quick Observation: The data contains information till 03/09/2018, and we can observe that the number of accidents in the three months is almost same across four of the boroughs, namely: Manhattan, Brooklyn, Queens and Bronx.");
+              d3.select("#selected-dropdown").text("Quick Fact: More New Yorkers are now killed in traffic than murdered by guns. A New Yorker is killed in a crash every 33 hours.");
           }
 
 
@@ -196,7 +184,7 @@
               .duration(2000)
               .attr("y", d => yScale(d.count2017))
               .attr("height", d => innerHeight - yScale(d.count2017))
-              d3.select("#selected-dropdown").text("Quick Observation: The number of accidents in 2017 have dropped as compared to 2016.");
+              d3.select("#selected-dropdown").text("Quick Fact: Traffic is the leading cause of injury-related death for children, and after falls, the most common cause of injury-related death for seniors.");
           }
 
           if (currYear == "2016")
@@ -206,7 +194,7 @@
               .duration(2000)
               .attr("y", d => yScale(d.count2016))
               .attr("height", d => innerHeight - yScale(d.count2016))
-              d3.select("#selected-dropdown").text("Quick Observation: The number of accidents have dropped in 2016 as compared to 2015.");
+              d3.select("#selected-dropdown").text("Quick Fact: For every eight traffic fatalities, New Yorkers suffer 100 life-altering serious injuries—nearly 34,000 over the past eight years—including the loss of limb, immobility, traumatic brain injury or chronic pain.");
           }
 
           if (currYear == "2015")
@@ -216,7 +204,7 @@
               .duration(2000)
               .attr("y", d => yScale(d.count2015))
               .attr("height", d => innerHeight - yScale(d.count2015))
-              d3.select("#selected-dropdown").text("Quick Observation: 2015 observed the maximum number of accidents in almost all of the boroughs, expecially Brooklyn.");
+              d3.select("#selected-dropdown").text("Quick Fact: 2015 observed the maximum number of accidents in almost all of the boroughs, expecially Brooklyn.");
           }
 
           if (currYear == "2014")
@@ -226,7 +214,7 @@
               .duration(2000)
               .attr("y", d => yScale(d.count2014))
               .attr("height", d => innerHeight - yScale(d.count2014))
-              d3.select("#selected-dropdown").text("Quick Observation: There was a small increase in the number of accidents in 2014 as compared to 2013.");
+              d3.select("#selected-dropdown").text("Quick Fact: Major streets like Queens Boulevard and Atlantic Avenue make up only 15 percent of our city’s road network, but they are the site of more than half of pedestrian and cyclist fatalities.");
           }
 
           if (currYear == "2013")
@@ -236,17 +224,7 @@
               .duration(2000)
               .attr("y", d => yScale(d.count2013))
               .attr("height", d => innerHeight - yScale(d.count2013))
-              d3.select("#selected-dropdown").text("Quick Observation: Brooklyn experiences that maximum number of accidents among all boroughs, and Manhattan and Queens have almost the same number of accidents.");
-          }
-
-          if (currYear == "2012")
-          {
-          d3.selectAll("g").selectAll("rect")
-              .transition()
-              .duration(2000)
-              .attr("y", d => yScale(d.count2012))
-              .attr("height", d => innerHeight - yScale(d.count2012))
-              d3.select("#selected-dropdown").text("Quick Observation: The year 2012 covers information from the month of July till the month of December.");
+              d3.select("#selected-dropdown").text("Quick Fact: Brooklyn experiences that maximum number of accidents among all boroughs, and Manhattan and Queens have almost the same number of accidents.");
           }
       })
 
@@ -254,13 +232,23 @@
       <br>
       <br>
       <br>
-      <h3 style="color: white"> Some key observations from the data: </h3>
+      <h2 style="color: white"> Observations from the data: </h2>
       <ul style="color: white">
-        <li> Bronx has observed almost the same number of accidents every year while the others have fluctuated quite a lot. </li> <br>
+        <li> Bronx has observed almost the same number of accidents every year while the number of accidents in other boroughs has fluctuated quite a lot. </li> <br>
         <li> 2015 was the year where the maximum number of accidents took place in most boroughs.</li> <br>
         <li> Brooklyn sees the maximum number of accidents each year. </li> <br>
-        <li> The number of accidents across four of the boroughs (Manhattan, Brooklyn, Queens and Bronx) is nearly the same in 2012 (covering July - December) and 2018 (covering January - March). </li>
+        <li> The number of accidents is consistent across four of the boroughs (Manhattan, Brooklyn, Queens and Bronx) in 2018. </li><br>
+        <li> The number of accidents increased from 2013 to 2015 and then reduced from 2015 to 2017. </li>
       </ul>
+      <br>
+      <p style="color: white"> <b> Important information about the data: </b> 2018 contains information from January 2018 to March 2018. </p>
+      <br>
+      <p style="color: white"> <b> Sources: </b> </p>
+      <ul style="color: white">
+        <li> Facts: <a style="color: white", href = 'https://www.transalt.org/about/facts'> Just The Facts: Our Work By The Numbers | Transportation Alternatives </a> </li> <br>
+        <li> Data: <a style="color: white", href = 'https://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95'> NYPD Motor Vehicle Collisions | NYC Open Data </a> </li>
+      </ul>
+      <br>
       <br>
       <br>
       <br>
