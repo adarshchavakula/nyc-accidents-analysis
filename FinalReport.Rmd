@@ -17,7 +17,7 @@ We chose the NYC Open Dataset for NYPD Motor Vehicle Collisions . This is an ope
 
 3. **Accident Information**:  What are the main factors contributing to accidents? What are the types of Vehicles that cause more accidents? Is there a relation between the kind of vehicle and the accident location? What are the causes of accident in different vehicle types? Which mode of transportation is more likely to get involved in an accident? What are the main reasons behind accidents at hotspots (ex. inattentive driver?)
 
-4. **Misc**: What has been going on around Columbia? Any intersections around Columbia we need to be wary of? Am I safer if I walk on Amsterdam instead of Broadway maybe?? 
+4. **Fun Misc**: What has been going on around Columbia University campus? Any intersections around Columbia we need to be wary of? Am I safer if I walk on Amsterdam instead of Broadway? Which neigborhoods have high accident rates? 
 
 
 #### Team Members and Contributions
@@ -98,7 +98,8 @@ We wanted to see how the quality of the data has been changing over time. Our in
 accidents <- accidents %>% 
   mutate(DATE = as.Date(DATE, format='%m/%d/%Y')) %>% 
   arrange(DATE) %>% 
-  mutate(YEAR = format(DATE, "%Y"))
+  mutate(YEAR = format(DATE, "%Y")) %>%
+  mutate(MONTH = format(DATE, "%m"))
 
 accidents_missing <- accidents %>% 
   mutate(MISSING_BOROUGH=1*is.na(BOROUGH), 
@@ -123,4 +124,193 @@ ggplot(data=missing_borough_by_year, aes(x=YEAR, y=pc_missing_borough)) + geom_c
   
 ```
 
-It appears that the quality of the data has been deteriorating over time. 2012 had only about 23% missing Borough information while 2017 was close to 40%.
+**It appears that the quality of the data has been deteriorating over time. 2012 had only about 23% missing Borough information while 2017 was close to 40%.**
+
+## Location - Where do most accidents happen
+
+### Boroughs
+Let's first look art the broad level of the different NYC boroughs and see where most accidents happen:
+
+```{r}
+
+ggplot(data=subset(accidents, !is.na(BOROUGH)), aes(BOROUGH)) + geom_bar(fill="lightblue", color="black") + xlab("Borough") + ylab('Count of Accidents') + ggtitle('Accidents by Borough (2012 - 2018)') + theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+It appears that Brooklyn is the borough with the most number of accidents. This is not surprising as it is the most populated one. We can get a better understanding of this by looking at the ratio of annual accidents to the populations of these boroughs.
+
+<Accidents/10000 people chart>
+
+This chart reveals a different picture compared to the prior chart. It is apparent that Manhattan has a higher number of accidents per 1000 residents compared to Brooklyn - making it more dangerous.
+
+
+### ZIP codes
+
+We looked at a more granular level of aggregation with ZIP codes to identify neighborhoods with the most accidents. These can be plotted on a map using the `choroplethrZip` library. This library is not available on CRAN and has to be downloaded from [GitHub](https://github.com/arilamstein/choroplethrZip).
+
+
+```{r,message=FALSE, warning=FALSE, results='hide'}
+library(choroplethrZip)
+```
+
+```{r, message=FALSE, warning=FALSE, fig.width=6}
+accidents_zip_other <- accidents %>% filter(!is.na(`ZIP CODE`)) %>% 
+  group_by(`ZIP CODE`,BOROUGH) %>% 
+  summarise(NUMBER_OF_ACCIDENTS=n())
+
+names(accidents_zip_other) <- c("region", "BOROUGH","value") 
+accidents_zip_other$region <- factor(accidents_zip_other$region)
+accidents_zip_other <- accidents_zip_other[!duplicated(accidents_zip_other$region),]
+
+zip_choropleth(accidents_zip_other,
+               state_zoom = "new york",
+               county_zoom = c(36005,36047,36061,36081,36085),
+               title      = "Accidents by Zip Code in New York City",
+               legend     = "Number of Accidents") + 
+  theme(plot.title = element_text(hjust = 0.5, size=15)) + 
+  viridis::scale_fill_viridis(discrete = TRUE) + coord_map()
+```
+
+We can make a few quick observations from the chart:
+
+1. Midtown Manhattan saw a large number of accidents per ZIP code - despite the fact that the neighborhoods are relatively small.
+2. Brooklyn also has a large number of ZIP codes with high accident rates.
+2. Large parts of Queens, Bronx, Staten Island and Uptown Manhattan had relatively fewer accidents.
+
+We also wanted to see which ZIP codes had the highest fatalities. 
+
+<fatalities chart>
+
+The ZIP codes which have the highest accidents and fatalities are the following:
+
+<zip code cleaveland charts>
+
+## Time: When do accidents happen?
+
+We tried to understand the trend in accidents over time. We started by looking at daily accidents over time (over the span of 5 years). This is obviously expected to be noisy, so we added a trend curve using the non-parametric `loess` smoothing.
+
+```{r}
+
+accidents_per_day <- accidents %>%
+  group_by(DATE, BOROUGH) %>%
+  summarise(NUMBER_OF_ACCIDENTS=n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`), 
+            NUMBER_OF_INJURIES = sum(`NUMBER OF PERSONS INJURED`)) %>%
+  filter(NUMBER_OF_ACCIDENTS<400) # Remove one outlier point 
+
+
+ggplot(accidents_per_day, aes(x=DATE, y=NUMBER_OF_ACCIDENTS)) + geom_line(aes(colour="Accidents")) +
+  geom_smooth(method = "loess", span = .2, se = TRUE, show.legend = TRUE, aes(colour="Trend")) +
+  scale_colour_manual(name="Legend", values=c("black", "blue")) +
+  xlab("Time") + ylab("Number of Daily Accidents") +
+  ggtitle("Daily Accidents") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+There are a few quick observations we can make from this chart:
+
+1. There seems to be an abrupt jump in the number of days with more than 200 accidents sometime around mid 2016. 
+2. The trend curve has a very gradual overall increase over time.
+3. The trend curve seems to be oscillating - indicating a periodicity in the data.
+
+To better understand the periodicity aspect of the data, we looked at the number of accidents aggregated over a month level.
+
+
+```{r}
+accidents_by_month <- accidents %>% filter(YEAR > 2012) %>% filter(YEAR < 2018) %>%
+   group_by(MONTH) %>% summarise(num_accidents = n())
+  
+ggplot(accidents_by_month, aes(x=MONTH, y=num_accidents)) +
+  geom_bar(stat="identity", fill="lightblue", color="black")+
+  xlab("Month") + ylab("Total Accidents") +
+  ggtitle("Accidents by month") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+The chart shows a dip in the accidents for the first few months of the year. There seem to be fewer accidents in winter. We also tried to plot the same information in a polar coordinate plot to give a better sense of the seasonality. 
+
+
+```{r}
+ggplot(accidents_by_month, aes(x=MONTH, y=num_accidents)) +
+  geom_bar(stat="identity", fill="lightblue", color="black")+
+  xlab("Month") + ylab("Total Accidents") +
+  ggtitle("Accidents by month") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_polar(start=0)
+
+```
+
+### On Design Choices:
+The above chart is a polar coordinate representation of the bar chart we saw above. The Cartesian bar chart is significantly easier to read and make inferences from. The differneces in values are linear and intuitive. However it fails to capture the cyclical nature of months (Decmber looping over to January) which is better captured by the Polar bar chart.
+
+After time of the year, we were interested in looking at trends by time of the day. We aggregated the data by the hour and looked at the accidents. Like before, we made both the cartesian bar charts as well as the polar bar charts.
+
+
+```{r}
+accidents_by_timeofday <- accidents %>%
+  mutate(HOUR = format(as.POSIXct(TIME), "%H")) %>%
+  group_by(HOUR, BOROUGH) %>%
+  summarise(NUMBER_OF_ACCIDENTS=n(), 
+            NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`), 
+            NUMBER_OF_INJURIES = sum(`NUMBER OF PERSONS INJURED`))# %>%
+#  filter(NUMBER_OF_ACCIDENTS<400) # Remove one outlier point 
+
+
+ggplot(accidents_by_timeofday, aes(x=HOUR, weights=NUMBER_OF_ACCIDENTS)) +
+  geom_bar(stat="count", fill="lightblue", color="black") +
+  xlab("Time") + ylab("Accidents") +
+  ggtitle("Hourly Accidents") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r}
+ggplot(accidents_by_timeofday, aes(x=HOUR, weights=NUMBER_OF_ACCIDENTS)) +
+  geom_bar( stat="count", fill="lightblue", color="black") +
+  xlab("Time") + ylab("Accidents") +
+  ggtitle("Hourly Accidents") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_polar()
+```
+
+
+
+
+## Misc: Around the Columbia Neighborhood
+
+We filtered our dataset to look at accidents in the Columbia neighborhood. In particular, we are interested in accidents in the year 2017 in the ZIP codes 10027 (Morningside Heights) and 10025 (Upper West Side). 
+
+```{r}
+accidents_cu <- accidents %>% 
+  filter(`ZIP CODE`== 10027 | `ZIP CODE`== 10025) %>% 
+  filter(!is.na(LOCATION)) %>% 
+  filter(YEAR==2017)
+```
+
+The `ggmap` library has the amazing support to just let us use "Columbia University" as a keyword input to fetch the map of the neighborhood. We then use a scatterplot (with alpha blending) of all the accidents and use a 2D density plot to focus on the hotspots.
+
+```{r, message=FALSE, warning=FALSE}
+library(ggmap)
+require(gridExtra)
+
+p <- qmap(location = "columbia university", zoom = 14) + theme(plot.margin=unit(c(0.1,0.1,0.1,0.1), "cm")) +
+  ggtitle("Columbia University Neighborhood") +
+  theme(plot.title = element_text(hjust = 0.5))
+q <- p + 
+  geom_point(data=accidents_cu, aes(x=LONGITUDE, y=LATITUDE), alpha=0.1, colour="blue") +
+  geom_density_2d(data=accidents_cu, aes(x=LONGITUDE, y=LATITUDE)) + 
+  ggtitle("Road Accident Hotspots") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+grid.arrange(p, q, ncol=2)
+
+```
+
+There are two major hotspots revealed by the density plot - 
+
+1. 96th St and Broadway/Amsterdam Av. 
+2. Harlem 125th St and Adam Clayton Powell Jr Av/ Fredric Douglas Blvd.
+
+These are both localities where a lot of grad students live and commute and they had the highest number of accidents in 2017. Other places with a large number of accidents are 110th St and Broadway, 125th St and Broadway, 125th St and Amsterdam etc. All intersections on 96th St and 125th St have a large number of accidents.
+
