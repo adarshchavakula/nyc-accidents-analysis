@@ -180,7 +180,7 @@ accidents_by_reasons <- accidents %>% filter(!is.na(`CONTRIBUTING FACTOR VEHICLE
 
 accidents_by_reasons <- head(accidents_by_reasons, n = 50)
 
-ggplot(accidents_by_reasons, aes(x = `CONTRIBUTING FACTOR VEHICLE 1`, y = `CONTRIBUTING FACTOR VEHICLE 2`, fill = NUMBER_OF_ACCIDENTS)) + theme(axis.text.x = element_text(angle = 90, hjust = 1))+geom_tile()+xlab("Contributing Factor Vehicle 1")+ylab("Contributing Factor Vehicle 2")+ggtitle("Number of Accidents by combinations of Contributing Factors of Vehicles")+theme(plot.title = element_text(hjust = 0.5))+viridis::scale_fill_viridis()
+ggplot(accidents_by_reasons, aes(x = `CONTRIBUTING FACTOR VEHICLE 1`, y = `CONTRIBUTING FACTOR VEHICLE 2`, fill = NUMBER_OF_ACCIDENTS)) + theme(axis.text.x = element_text(angle = 60, hjust = 1))+geom_tile()+xlab("Contributing Factor Vehicle 1")+ylab("Contributing Factor Vehicle 2")+ggtitle("Number of Accidents by combinations of Contributing Factors of Vehicles")+theme(plot.title = element_text(hjust = 0.5))+viridis::scale_fill_viridis()
 ```
 
 
@@ -226,7 +226,7 @@ accidents_by_vehicles <- accidents %>% filter(!is.na(`VEHICLE TYPE CODE 1`) & !i
 
 accidents_by_vehicles <- head(accidents_by_vehicles, n = 50)
 
-ggplot(accidents_by_vehicles, aes(x = `VEHICLE TYPE CODE 1`, y = `VEHICLE TYPE CODE 2`, fill = NUMBER_OF_ACCIDENTS)) + theme(axis.text.x = element_text(angle = 90, hjust = 1))+geom_tile()+xlab("First Vehicle Type")+ylab("Second Vehicle Type")+ggtitle("Number of Accidents by combinations of Vehicle Types")+theme(plot.title = element_text(hjust = 0.5))+viridis::scale_fill_viridis()
+ggplot(accidents_by_vehicles, aes(x = `VEHICLE TYPE CODE 1`, y = `VEHICLE TYPE CODE 2`, fill = NUMBER_OF_ACCIDENTS)) + theme(axis.text.x = element_text(angle = 60, hjust = 1))+geom_tile()+xlab("First Vehicle Type")+ylab("Second Vehicle Type")+ggtitle("Number of Accidents by combinations of Vehicle Types")+theme(plot.title = element_text(hjust = 0.5))+viridis::scale_fill_viridis()
 ```
 
 
@@ -236,7 +236,7 @@ accidents_by_reasons_map <- head(accidents_by_reasons, n=5)
 accidents_topCF12 <- accidents %>%
   filter(`CONTRIBUTING FACTOR VEHICLE 1` %in% accidents_by_reasons_map$`CONTRIBUTING FACTOR VEHICLE 1` & `CONTRIBUTING FACTOR VEHICLE 2` %in% accidents_by_reasons_map$`CONTRIBUTING FACTOR VEHICLE 2`) %>% filter(!is.na(LATITUDE) & !is.na(LONGITUDE)) %>% filter(BOROUGH=='MANHATTAN')
 
-qmap('new york city', zoom = 12,color = 'bw', legend = 'topleft') + geom_point(aes(x=LONGITUDE, y=LATITUDE, color=`CONTRIBUTING FACTOR VEHICLE 1`), data=accidents_topCF12,alpha=0.7, size=1) + viridis::scale_color_viridis(discrete=TRUE)+ggtitle("Spatial View of Accidents by Top 5 Contributing Factors in Manhattan")+theme(plot.title = element_text(hjust = 0.5, size=15))
+qmap('new york city', zoom = 12,color = 'bw', legend = 'topleft') + geom_point(aes(x=LONGITUDE, y=LATITUDE, color=`CONTRIBUTING FACTOR VEHICLE 1`), data=accidents_topCF12,alpha=0.6, size=1.5) + viridis::scale_color_viridis(discrete=TRUE)+ggtitle("Spatial View of Accidents by Top 5 Contributing Factors in Manhattan")+theme(plot.title = element_text(hjust = 0.5, size=15))
  
 ```
 
@@ -323,13 +323,13 @@ zip_choropleth(accidents_zip_other,
 ```
 
 ```{r}
-accidents_zip_other <- accidents %>% filter(!is.na(`ZIP CODE`)) %>% group_by(`ZIP CODE`,BOROUGH) %>% summarise(NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`))
+accidents_zip_deaths <- accidents %>% filter(!is.na(`ZIP CODE`)) %>% group_by(`ZIP CODE`,BOROUGH) %>% summarise(NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`))
 
-names(accidents_zip_other) <- c("region", "BOROUGH","value") 
-accidents_zip_other$region <- factor(accidents_zip_other$region)
-accidents_zip_other <- accidents_zip_other[!duplicated(accidents_zip_other$region),]
+names(accidents_zip_deaths) <- c("region", "BOROUGH","value") 
+accidents_zip_deaths$region <- factor(accidents_zip_deaths$region)
+accidents_zip_deaths <- accidents_zip_deaths[!duplicated(accidents_zip_deaths$region),]
 
-zip_choropleth(accidents_zip_other,
+zip_choropleth(accidents_zip_deaths,
                state_zoom = "new york",
                county_zoom = c(36005,36047,36061,36081,36085),
                title      = "Deaths by Zip Code in New York City",
