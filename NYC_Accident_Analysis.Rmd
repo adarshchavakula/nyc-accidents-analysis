@@ -111,14 +111,14 @@ accidents <- accidents %>% select(-c(`VEHICLE TYPE CODE 5`,`CONTRIBUTING FACTOR 
 
 Our next step is to identify if the values are missing at random. The `visna` function in the `extracat` library is useful for that.
 
-```{r, fig.height=8}
+```{r, fig.height=12}
 library(extracat)
 visna(accidents)
 ```
 
 We observe that several variables do not have any missing values. It is more informative to do the `visna` considering a subset of the variables that have missing values.
 
-```{r, fig.height=4}
+```{r, fig.height=12}
 accidents_sub <- accidents %>% select(BOROUGH,`ZIP CODE`,LOCATION,
                                       `ON STREET NAME`, `CROSS STREET NAME`, 
                                       `CONTRIBUTING FACTOR VEHICLE 1`,`VEHICLE TYPE CODE 1`)
@@ -223,7 +223,7 @@ Installation Instructions:
 library(choroplethrZip)
 ```
 
-```{r, message=FALSE, warning=FALSE, fig.width=8}
+```{r, message=FALSE, warning=FALSE, fig.width=10}
 accidents_zip_other <- accidents %>% filter(!is.na(`ZIP CODE`)) %>% 
   group_by(`ZIP CODE`,BOROUGH) %>% 
   summarise(NUMBER_OF_ACCIDENTS=n())
@@ -263,7 +263,7 @@ zip_choropleth(accidents_zip,
 
 We also looked at the ZIP codes with the highest fatalities.
 
-```{r, message=FALSE, warning=FALSE, fig.width=8}
+```{r, message=FALSE, warning=FALSE, fig.width=10}
 accidents_zip_deaths <- accidents %>% filter(!is.na(`ZIP CODE`)) %>% group_by(`ZIP CODE`,BOROUGH) %>% summarise(NUMBER_OF_DEATHS = sum(`NUMBER OF PERSONS KILLED`))
 
 names(accidents_zip_deaths) <- c("region", "BOROUGH","value") 
@@ -716,7 +716,7 @@ The following graphs represent these three broad spectrums of analyses well.
 
 #### 1. Choropleth: Location by Zip Code
 
-```{r, message=FALSE, warning=FALSE, fig.width=8, echo=FALSE}
+```{r, message=FALSE, warning=FALSE, fig.width=10, echo=FALSE}
 accidents_zip_other <- accidents %>% filter(!is.na(`ZIP CODE`)) %>% 
   group_by(`ZIP CODE`,BOROUGH) %>% 
   summarise(NUMBER_OF_ACCIDENTS=n())
