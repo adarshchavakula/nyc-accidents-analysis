@@ -11,12 +11,13 @@ output:
 We chose the NYC Open Dataset for NYPD Motor Vehicle Collisions. This is an open source dataset updated on a daily basis that tracks all road accidents in New York City. We want to use this dataset to infer trends about the various factors that cause accidents. A key question we wish to answer is **Can we provide insights to help make the streets of NYC safer?** Understanding the various reasons for accidents can certainly help us answer this question. For example, we want to identify the “hotspots” - intersections, streets etc. where most accidents occur. This could be a useful insight for authorities to take to necessary actions to remediate some of the issues.
 
 In addition to this report, we have 2 interactive plots:
+
 * [Borough-Wise Distribution of Accidents from 2013-2018](https://bl.ocks.org/joaak/raw/d14b276943b686d470447e716a8e0411/)
 * [Time Variation of Contributing Factors from 2013-2017](https://bl.ocks.org/DeepakMaran/raw/d0108a1637d6db4ab8207018eeb144af/)
 
-The github repo for the project is[ here](https://github.com/adarshchavakula/nyc-accidents-analysis).
+The github repo for the project is [here](https://github.com/adarshchavakula/nyc-accidents-analysis).
 
-#### Questions of Interest
+### Questions of Interest
 
 1. **Location**
 * How are the accidents distributed across boroughs? 
@@ -42,16 +43,16 @@ The github repo for the project is[ here](https://github.com/adarshchavakula/nyc
 * Which neigborhoods have high accident rates? 
 
 
-#### Team Members and Contributions
+### Team Members and Contributions
 
 1. Aakanksha Joshi - aj2771
-`The CTO and Editorial Director`. Created the D3 interactive chart for[ Accidents by Borough](https://bl.ocks.org/joaak/raw/d14b276943b686d470447e716a8e0411/), contributed to the Location analysis, Vision Zero analysis and executive summary.
+`The CTO and Editorial Director`. Created the D3 interactive chart for [Accidents by Borough](https://bl.ocks.org/joaak/raw/d14b276943b686d470447e716a8e0411/), contributed to the Location analysis, Vision Zero analysis and executive summary.
 
 2. Adarsh Chavakula - ac4244
 `The CEO and (Tidyverse) Advisory Committee`. Contributed to the data quality analysis, Columbia neighborhood analysis and compiled the project report. 
 
 3. Deepak Maran - dm3308
-`Board Executive and Chief Design Officer`. Created the D3 interactive chart for[ Contributing Factors over Time](https://bl.ocks.org/DeepakMaran/raw/d0108a1637d6db4ab8207018eeb144af/), contributed to the Time Analysis and executive summary.
+`Board Executive and Chief Design Officer`. Created the D3 interactive chart for [Contributing Factors over Time](https://bl.ocks.org/DeepakMaran/raw/d0108a1637d6db4ab8207018eeb144af/), contributed to the Time Analysis and executive summary.
 
 4. Harsheel Singh Soin - hss2148
 `The COO and Design Insights Lead`. Contributed to the Accident Information analysis, location analysis, heatmaps, choropleths, the Vision Zero analysis and executive summary.
@@ -59,7 +60,7 @@ The github repo for the project is[ here](https://github.com/adarshchavakula/nyc
 
 ## Description of the Data
 
-The data was collected from the[ NYC Open Data](https://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95) website. It provides information on the exact location, borough, time, cause, type of vehicles, number of deaths and injuries for every accident. The data is from third quarter of 2012 to the first quarter of 2018. This data is collected by the police department (NYPD) because the NYC Council passed a local law in 2011. The data is manually run every month and reviewed by the TrafficStat unit before being posted on the NYPD website. 
+The data was collected from the [NYC Open Data](https://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95) website. It provides information on the exact location, borough, time, cause, type of vehicles, number of deaths and injuries for every accident. The data is from third quarter of 2012 to the first quarter of 2018. This data is collected by the police department (NYPD) because the NYC Council passed a local law in 2011. The data is manually run every month and reviewed by the TrafficStat unit before being posted on the NYPD website. 
 
 Each record represents a collision in NYC by borough, precinct and cross street. The data can potentially provide insights into how dangerous or safe certain intersections in NYC are. The information is available in both pdf and csv formats. 
 
@@ -177,9 +178,9 @@ ggplot(data=subset(accidents, !is.na(BOROUGH)), aes(BOROUGH)) + geom_bar(fill="l
 
 ```
 
-It appears that Brooklyn is the borough with the most number of accidents. This is not surprising as it is the most populated one. We can get a better understanding of this by looking at the ratio of annual accidents to the populations of these boroughs[ (Population data)](https://en.wikipedia.org/wiki/Demographics_of_New_York_City).
+It appears that Brooklyn is the borough with the most number of accidents. This is not surprising as it is the most populated one. We can get a better understanding of this by looking at the ratio of annual accidents to the populations of these boroughs [(Population data)](https://en.wikipedia.org/wiki/Demographics_of_New_York_City).
 
-We also visualized[ Borough-Wise Distribution of Accidents from 2013-2018](https://bl.ocks.org/joaak/raw/d14b276943b686d470447e716a8e0411/). This is an interactive D3 chart. 
+We also visualized [Borough-Wise Distribution of Accidents from 2013-2018](https://bl.ocks.org/joaak/raw/d14b276943b686d470447e716a8e0411/). This is an interactive D3 chart. 
 
 ```{r}
 
@@ -209,7 +210,7 @@ This chart reveals a different picture compared to the prior chart. Manhattan ha
 
 ### ZIP Codes
 
-We looked at a more granular level of aggregation with ZIP codes to identify neighborhoods with the most accidents. These can be plotted on a map using the `choroplethrZip` library. This library is not available on CRAN and has to be downloaded from[ GitHub](https://github.com/arilamstein/choroplethrZip).
+We looked at a more granular level of aggregation with ZIP codes to identify neighborhoods with the most accidents. These can be plotted on a map using the `choroplethrZip` library. This library is not available on CRAN and has to be downloaded from [GitHub](https://github.com/arilamstein/choroplethrZip).
 
 Installation Instructions:
 
@@ -332,13 +333,13 @@ nycmap + stat_bin2d(aes(x = LONGITUDE, y = LATITUDE), size = .5, bins = 150,
 
 The heatmap is lit up brightly for midtown and lower Manhattan. There are also hotspots in Brooklyn (along Atlantic Avenue) which are brightly lit. This chart illustrates why the accidents per 1000 residents is the highest for Manhattan.
 
-#### Verifying Vision Zero
+### Verifying Vision Zero
 
-*"Vision Zero is a safe-streets initiative created by New York City’s Department of Transportation (DOT) in 2014, the first year of Mayor Bill de Blasio’s administration. The Vision Zero concept and program emerged in the late 1990s in Sweden, which aimed to eliminate traffic deaths and serious injuries. A number of other countries and cities subsequently adopted similar traffic safety programs; and safe-street improvements were undertaken under the administration of New York’s previous mayor, Michael Bloomberg," *[reports a Nacto report from 2018.](https://nacto.org/wp-content/uploads/2017/11/IB-AA-0517-v2-1.pdf). *"In NYC, Vision Zero consists of reengineering intersections and streets: it simplifies complex intersections, narrows traffic lanes, adds speed bumps and bicycle paths, shortens pedestrian-crossing distances, alters the timing of traffic lights, adds speed-detection and red-light cameras, and installs “leading pedestrian intervals” to give pedestrians a head start at a light before drivers can turn into the crosswalk,"* the report further adds. 
+*"Vision Zero is a safe-streets initiative created by New York City’s Department of Transportation (DOT) in 2014, the first year of Mayor Bill de Blasio’s administration. The Vision Zero concept and program emerged in the late 1990s in Sweden, which aimed to eliminate traffic deaths and serious injuries. A number of other countries and cities subsequently adopted similar traffic safety programs; and safe-street improvements were undertaken under the administration of New York’s previous mayor, Michael Bloomberg," * [reports a Nacto report from 2018.](https://nacto.org/wp-content/uploads/2017/11/IB-AA-0517-v2-1.pdf). *"In NYC, Vision Zero consists of reengineering intersections and streets: it simplifies complex intersections, narrows traffic lanes, adds speed bumps and bicycle paths, shortens pedestrian-crossing distances, alters the timing of traffic lights, adds speed-detection and red-light cameras, and installs “leading pedestrian intervals” to give pedestrians a head start at a light before drivers can turn into the crosswalk,"* the report further adds. 
 
-*"In January 2014, Mayor Bill de Blasio announced adoption of New York City's Vision Zero and enumerated a long list of initiatives the city would be following to reduce fatalities on city streets. Among the measures it plans to take includes pushing for changes in the State legislature to allow the city more control in the administration of traffic safety measures such as speed reduction," *[writes the Wikipedia on Vision Zero](https://en.wikipedia.org/wiki/Vision_Zero_(New_York_City)).
+*"In January 2014, Mayor Bill de Blasio announced adoption of New York City's Vision Zero and enumerated a long list of initiatives the city would be following to reduce fatalities on city streets. Among the measures it plans to take includes pushing for changes in the State legislature to allow the city more control in the administration of traffic safety measures such as speed reduction," * [writes the Wikipedia on Vision Zero](https://en.wikipedia.org/wiki/Vision_Zero_(New_York_City)).
 
-*"According to a OneNYC report from 2017, the Department of Transportation (DOT) has completed a total of 356 street improvement projects, since the start of Vision Zero, with an emphasis on the city’s most crash-prone corridors and intersections. The Great Streets initiative focuses on improving safety on four of New York City’s major arterial routes: Atlantic Avenue, Fourth Avenue, Grand Concourse, and Queens Boulevard," *[reports OneNYC](https://onenyc.cityofnewyork.us/goals/vision-zero/).
+*"According to a OneNYC report from 2017, the Department of Transportation (DOT) has completed a total of 356 street improvement projects, since the start of Vision Zero, with an emphasis on the city’s most crash-prone corridors and intersections. The Great Streets initiative focuses on improving safety on four of New York City’s major arterial routes: Atlantic Avenue, Fourth Avenue, Grand Concourse, and Queens Boulevard," * [reports OneNYC](https://onenyc.cityofnewyork.us/goals/vision-zero/).
 
 We decided to look into the accident trends on Atlantic Avenue and Queens Boulevard and see if Vision Zero had an impact.  
 
@@ -387,7 +388,7 @@ There are a few quick observations we can make from this chart:
 2. The trend curve has a very gradual overall increase with time.
 3. The trend curve seems to be oscillating - indicating a seasonality in the data.
 
-##### Accidents by Month
+### Accidents by Month
 
 To better understand the seasonality aspect of the data, we looked at the number of accidents aggregated over a month level.
 
@@ -417,7 +418,7 @@ ggplot(accidents_by_month, aes(x=MONTH, y=num_accidents)) +
 
 ```
 
-#### Accidents by Time of Day 
+### Accidents by Time of Day 
 
 Besides time of year, we were interested in looking at trends by time of day. We aggregated the data by the hour and looked at the accidents. Like before, we made both the cartesian bar charts as well as the polar bar charts.
 
@@ -543,11 +544,11 @@ ggplot(accidents_by_vehicles, aes(x = `VEHICLE TYPE CODE 1`, y = `VEHICLE TYPE C
 
 We observe that most accidents occur when one or more drivers of the vehicles involved were distracted/inattentive. 
 
-#### Contributing Factors and Time
+### Contributing Factors and Time
 
-We looked at[ Time Variation of Contributing Factors from 2013-2017](https://bl.ocks.org/DeepakMaran/raw/d0108a1637d6db4ab8207018eeb144af/). This is an interactive D3 chart. 
+We looked at [Time Variation of Contributing Factors from 2013-2017](https://bl.ocks.org/DeepakMaran/raw/d0108a1637d6db4ab8207018eeb144af/). This is an interactive D3 chart. 
 
-#### Contributing Factors and Locations
+### Contributing Factors and Locations
 
 We wanted to observe which locations in NYC were more likely to see the particular contributing factors we noted above. For this we focused only on Manhattan to get a closer view. We also looked only at the top 5 contributing factors.
 
@@ -693,7 +694,7 @@ These are both localities where a lot of grad students live and commute and they
 
 ## Executive Summary
 
-#### Introduction
+### Introduction
 
 *"More New Yorkers are now killed in traffic than murdered by guns. A New Yorker is killed in a crash every 33 hours"*, writes Transportation Alternatives. The statistics on traffic accidents in New York City are staggering - there were nearly 142,000 vehicle accidents in the city in 2017 alone. The question, therefore, becomes: **Can we derive insights to help make the streets of NYC safer?**
 
@@ -704,7 +705,16 @@ Our team decided to use the NYPD Motor Vehicle Collisions available as an NYC Op
 We used R and D3.js to perform all exploratory data analysis and visualization.
 
 
-#### Insights from Analyses:
+### Insights from Analyses:
+
+We decided to break down our analysis into three major parts:
+* Location
+* Time 
+* Contributing Factors
+
+The following graphs represent these three broad spectrums of analyses well. 
+
+#### 1. Choropleth: Location by Zip Code
 
 ```{r, message=FALSE, warning=FALSE, fig.width=8, echo=FALSE}
 accidents_zip_other <- accidents %>% filter(!is.na(`ZIP CODE`)) %>% 
@@ -726,6 +736,7 @@ zip_choropleth(accidents_zip_other,
 
 The choropleth shows the spread of accidents across New York aggregated by Zip code. Regions in Manhattan and Brooklyn experience the highest number of accidents, while Queens and Staten Island have the lowest. It can also be seen that the number of accidents taking place in the peripheral regions of the city is much lower than the number of accidents in the central part of the city, where traffic is more likely to be concentrated. Also, the midtown region of Manhattan experiences more accidents as compared to the other parts of Manhattan.
 
+#### 2. Bar Chart: Time by Hour of Day
 
 ```{r, echo=FALSE}
 accidents_by_timeofday <- accidents %>%
@@ -746,6 +757,7 @@ ggplot(accidents_by_timeofday, aes(x=HOUR, weights=NUMBER_OF_ACCIDENTS)) +
 
 The frequency of accidents peaks once during the morning (around 9 am) and once in the evening (around 5 pm). This is probably because these are the rush hours of traffic. Also the number of accidents in the evening rush hours is much higher than the number of accidents in the morning rush hours. 
 
+#### 3. Scatter Plot: Spatial Distribution of Contributing Factors Across Manhattan
 
 ```{r, fig.height=10, fig.width=10, warning=FALSE,message=FALSE, echo=FALSE}
 
@@ -778,7 +790,7 @@ We also created two interactive D3 visualizations:
 * [Borough-Wise Distribution of Accidents from 2013-2018](https://bl.ocks.org/joaak/raw/d14b276943b686d470447e716a8e0411/)
 * [Time Variation of Contributing Factors from 2013-2017](https://bl.ocks.org/DeepakMaran/raw/d0108a1637d6db4ab8207018eeb144af/)
 
-#### Conclusions/Suggestions:
+### Conclusions/Suggestions:
 
 * The increase in the missing borough information indicates requirement of improvement in data collection sources. 
 * People should drive more carefully during the rush hours (8 am - 9 am and 4 pm - 6 pm).
